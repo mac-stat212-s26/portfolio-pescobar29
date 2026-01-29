@@ -33,5 +33,5 @@ Make sure to download and add the data file to your portfolio repository as inst
 5.  Save the wrangled data to the `data/processed/` folder using `write_csv()`. Name this file `weather_clean.csv`. Look up the documentation for this function by typing `?write_csv` in the Console. You'll need to write an appropriate relative path.
 
 ```{r}
-weather_data <- read.csv("/Users/Patri/Desktop/COMP_212/portfolio-pescobar29/ica/data/raw/weather.csv")
+read.csv("/Users/Patri/Desktop/COMP_212/portfolio-pescobar29/ica/data/raw/weather.csv")
 ```
