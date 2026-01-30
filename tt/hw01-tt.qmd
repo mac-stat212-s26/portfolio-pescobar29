@@ -1,0 +1,111 @@
+---
+title: "Homework 01"
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r}
+#Method extracted from the repository
+install.packages("tidytuesdayR") 
+```
+```{r}
+#Method extracted from the repository
+tuesdata <- tidytuesdayR::tt_load('2026-01-27') 
+```
+```{r}
+#Method extracted from the repository
+companies <- tuesdata$companies
+legal_nature <- tuesdata$legal_nature
+qualifications <- tuesdata$qualifications
+size <- tuesdata$size
+```
+
+
+## TidyTuesday Section
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story with [effective visualization(s)]({{< var effective-viz-url >}}).  Provide sufficient background for readers to grasp your narrative.
+
+
+
+*Research question:*
+
+What factor drives the 10 companies with the highest share of capital stock in Brazil; the ownership qualifications,  the company size, or the legal nature of the company? 
+
+```{r}
+# Cleaning the data 
+top_companies <- companies %>%
+  arrange(desc(capital_stock)) %>%  
+  slice_head(n = 100)
+```
+
+
+```{r}
+# Ownership qualifications 
+owner_qualification <- top_companies %>%
+  group_by(owner_qualification) %>%
+  summarise(total_capital = sum(capital_stock, na.rm = TRUE)) %>%
+  mutate(total_share = total_capital / sum(total_capital) * 100) %>%
+  arrange(desc(total_share))
+```
+
+
+```{r}
+# Company size 
+company_size <- top_companies %>%
+  group_by(company_size) %>%
+  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
+  mutate(total_share = capital / sum(capital) * 100) %>%
+  arrange(desc(total_share))
+```
+
+
+```{r}
+# Legal nature 
+legal_nature <- top_companies %>%
+  group_by(legal_nature) %>%
+  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
+  mutate(total_share = capital / sum(capital) * 100) %>%
+  arrange(desc(total_share))
+```
+
+
+
+*Visualizations*
+
+```{r}
+ggplot(company_size, aes(x = reorder(company_size, total_share), y = total_share)) +
+  geom_bar(stat = "identity", fill = "blue") +
+  labs(title = "Capital Share Among Top 10% Firms by Company Size",
+       x = "Company Size",
+       y = "Share of Top 10% Capital (%)") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
+  geom_bar(stat = "identity", fill = "green") +
+  labs(title = "Capital Share Among Top 10 Firms by Legal Nature",
+       x = "Legal Nature",
+       y = "Share of Capital Stock (%)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 50, hjust = 1))
+```
+
+```{r}
+ggplot(owner_qualification, aes(x = owner_qualification, y = total_share)) +
+  geom_bar(stat = "identity", fill = "red") +
+  labs(title = "Capital Share Among Top 10 Firms by Owner Qualification",
+       x = "Owner Qualification",
+       y = "Share of Capital Stock (%)") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+
+
