@@ -77,16 +77,16 @@ legal_nature <- top_companies %>%
 ```{r}
 ggplot(company_size, aes(x = reorder(company_size, total_share), y = total_share)) +
   geom_bar(stat = "identity", fill = "blue") +
-  labs(title = "Capital share among top 10% firms by company size",
+  labs(title = "Capital share among top 100 firms by company size",
        x = "Company size",
-       y = "Share of top 10% capita") +
+       y = "Share of capital stock (%)") +
   theme_minimal()
 ```
 
 ```{r}
 ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
   geom_bar(stat = "identity", fill = "green") +
-  labs(title = "Capital share among top 10 firms by legal nature",
+  labs(title = "Capital share among top 100 firms by legal nature",
        x = "Legal nature",
        y = "Share of capital stock (%)") +
   theme_minimal() +
@@ -96,7 +96,7 @@ ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
 ```{r}
 ggplot(owner_qualification, aes(x = owner_qualification, y = total_share)) +
   geom_bar(stat = "identity", fill = "red") +
-  labs(title = "Capital share Among top 10 firms by owner qualification",
+  labs(title = "Capital share among top 100 firms by owner qualification",
        x = "Owner qualification",
        y = "Share of capital stock (%)") +
   theme_minimal() +
