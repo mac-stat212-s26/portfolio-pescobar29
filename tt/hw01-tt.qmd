@@ -30,24 +30,13 @@ Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
 
 
 *Research question:*
-
-What factor drives the 10 companies with the highest share of capital stock in Brazil; the ownership qualifications,  the company size, or the legal nature of the company? 
+How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?
 
 ```{r}
 # Cleaning the data 
 top_companies <- companies %>%
   arrange(desc(capital_stock)) %>%  
-  slice_head(n = 100)
-```
-
-
-```{r}
-# Ownership qualifications 
-owner_qualification <- top_companies %>%
-  group_by(owner_qualification) %>%
-  summarise(total_capital = sum(capital_stock, na.rm = TRUE)) %>%
-  mutate(total_share = total_capital / sum(total_capital) * 100) %>%
-  arrange(desc(total_share))
+  slice_head(n = 275)
 ```
 
 
@@ -74,35 +63,24 @@ legal_nature <- top_companies %>%
 
 *Visualizations*
 
+
 ```{r}
-ggplot(company_size, aes(x = reorder(company_size, total_share), y = total_share)) +
-  geom_bar(stat = "identity", fill = "blue") +
-  labs(title = "Capital share among top 100 firms by company size",
-       x = "Company size",
-       y = "Share of capital stock (%)") +
+ggplot(company_size, aes(x = total_share, y = reorder(company_size, total_share))) +
+  geom_col(fill = "blue") +
+  labs(title = "Capital Share by Company Size", x = "Share (%)", y = "Company Size") +
   theme_minimal()
 ```
 
 ```{r}
-ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
-  geom_bar(stat = "identity", fill = "green") +
-  labs(title = "Capital share among top 100 firms by legal nature",
-       x = "Legal nature",
-       y = "Share of capital stock (%)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 50, hjust = 1))
+ggplot(legal_nature, aes(x = total_share, y = reorder(legal_nature, total_share))) +
+  geom_col(fill = "green") +
+  labs(
+    title = "Capital Share by Legal Nature",
+    x = "Share (%)",
+    y = "Legal Nature"
+  ) +
+  theme_minimal()
 ```
-
-```{r}
-ggplot(owner_qualification, aes(x = owner_qualification, y = total_share)) +
-  geom_bar(stat = "identity", fill = "red") +
-  labs(title = "Capital share among top 100 firms by owner qualification",
-       x = "Owner qualification",
-       y = "Share of capital stock (%)") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-```
-
 
 
 
