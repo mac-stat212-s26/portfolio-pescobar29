@@ -13,6 +13,7 @@ library(tidyr)
 #Method extracted from the repository
 tuesdata <- tidytuesdayR::tt_load('2026-01-27') 
 ```
+
 ```{r}
 #Method extracted from the repository
 companies <- tuesdata$companies
@@ -76,18 +77,18 @@ legal_nature <- top_companies %>%
 ```{r}
 ggplot(company_size, aes(x = reorder(company_size, total_share), y = total_share)) +
   geom_bar(stat = "identity", fill = "blue") +
-  labs(title = "Capital Share Among Top 10% Firms by Company Size",
-       x = "Company Size",
-       y = "Share of Top 10% Capital (%)") +
+  labs(title = "Capital share among top 10% firms by company size",
+       x = "Company size",
+       y = "Share of top 10% capita") +
   theme_minimal()
 ```
 
 ```{r}
 ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
   geom_bar(stat = "identity", fill = "green") +
-  labs(title = "Capital Share Among Top 10 Firms by Legal Nature",
-       x = "Legal Nature",
-       y = "Share of Capital Stock (%)") +
+  labs(title = "Capital share among top 10 firms by legal nature",
+       x = "Legal nature",
+       y = "Share of capital stock (%)") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 50, hjust = 1))
 ```
@@ -95,9 +96,9 @@ ggplot(legal_nature, aes(x = legal_nature, y = total_share)) +
 ```{r}
 ggplot(owner_qualification, aes(x = owner_qualification, y = total_share)) +
   geom_bar(stat = "identity", fill = "red") +
-  labs(title = "Capital Share Among Top 10 Firms by Owner Qualification",
-       x = "Owner Qualification",
-       y = "Share of Capital Stock (%)") +
+  labs(title = "Capital share Among top 10 firms by owner qualification",
+       x = "Owner qualification",
+       y = "Share of capital stock (%)") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
