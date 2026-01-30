@@ -91,7 +91,7 @@
     "href": "ica/cleaning.html",
     "title": "Cleaning SFO Weather Data",
     "section": "",
-    "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.",
+    "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nCodeweather &lt;- read_csv(\"data/raw/weather.csv\")\nCodeweather_new &lt;- weather |&gt; \n    mutate(PrecipYr = na_if(PrecipYr, 99999))\n3 & 4.\nCodeweather_new &lt;- weather_new |&gt; \n    arrange(Month, Day) |&gt; \n    mutate(dateInYear = 1:365)\nCodemonths &lt;- tibble(\n    Month = 1:12,\n    month_name = month.abb)\nCodeweather_new &lt;- weather_new |&gt; \n    left_join(months)\nCodewrite_csv(weather_new, file = \"data/processed/weather_new.csv\")",
     "crumbs": [
       "In-Class Activities",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
