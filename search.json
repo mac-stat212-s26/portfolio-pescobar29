@@ -43,6 +43,17 @@
     ]
   },
   {
+    "objectID": "tt/hw01-tt.html",
+    "href": "tt/hw01-tt.html",
+    "title": "Homework 01",
+    "section": "",
+    "text": "TidyTuesday Section\nExplore the week’s TidyTuesday challenge. Develop a research question, then answer it through a short data story with effective visualization(s). Provide sufficient background for readers to grasp your narrative.\nResearch question:\nWhat factor drives the 10 companies with the highest share of capital stock in Brazil; the ownership qualifications, the company size, or the legal nature of the company?\nCode# Cleaning the data \ntop_companies &lt;- companies %&gt;%\n  arrange(desc(capital_stock)) %&gt;%  \n  slice_head(n = 100)\nCode# Ownership qualifications \nowner_qualification &lt;- top_companies %&gt;%\n  group_by(owner_qualification) %&gt;%\n  summarise(total_capital = sum(capital_stock, na.rm = TRUE)) %&gt;%\n  mutate(total_share = total_capital / sum(total_capital) * 100) %&gt;%\n  arrange(desc(total_share))\nCode# Company size \ncompany_size &lt;- top_companies %&gt;%\n  group_by(company_size) %&gt;%\n  summarise(capital = sum(capital_stock, na.rm = TRUE)) %&gt;%\n  mutate(total_share = capital / sum(capital) * 100) %&gt;%\n  arrange(desc(total_share))\nCode# Legal nature \nlegal_nature &lt;- top_companies %&gt;%\n  group_by(legal_nature) %&gt;%\n  summarise(capital = sum(capital_stock, na.rm = TRUE)) %&gt;%\n  mutate(total_share = capital / sum(capital) * 100) %&gt;%\n  arrange(desc(total_share))\nVisualizations\nCodeggplot(company_size, aes(x = reorder(company_size, total_share), y = total_share)) +\n  geom_bar(stat = \"identity\", fill = \"blue\") +\n  labs(title = \"Capital share among top 100 firms by company size\",\n       x = \"Company size\",\n       y = \"Share of capital stock (%)\") +\n  theme_minimal()\nCodeggplot(legal_nature, aes(x = legal_nature, y = total_share)) +\n  geom_bar(stat = \"identity\", fill = \"green\") +\n  labs(title = \"Capital share among top 100 firms by legal nature\",\n       x = \"Legal nature\",\n       y = \"Share of capital stock (%)\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 50, hjust = 1))\nCodeggplot(owner_qualification, aes(x = owner_qualification, y = total_share)) +\n  geom_bar(stat = \"identity\", fill = \"red\") +\n  labs(title = \"Capital share among top 100 firms by owner qualification\",\n       x = \"Owner qualification\",\n       y = \"Share of capital stock (%)\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))",
+    "crumbs": [
+      "TidyTuesday",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Homework 01</span>"
+    ]
+  },
+  {
     "objectID": "pcl/pcl.html",
     "href": "pcl/pcl.html",
     "title": "Pre-Class Learning Summaries",
@@ -50,7 +61,7 @@
     "text": "R",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -61,7 +72,7 @@
     "text": "Quarto\n\n\n\nfrom qmd4sci.njtierney.com",
     "crumbs": [
       "Pre-Class Learnings",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Pre-Class Learning Summaries</span>"
     ]
   },
   {
@@ -72,7 +83,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>ICA Sample 1</span>"
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 1</span>"
     ]
   },
   {
@@ -83,7 +94,7 @@
     "text": "Add content here",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>ICA Sample 2</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>ICA Sample 2</span>"
     ]
   },
   {
@@ -94,7 +105,7 @@
     "text": "Exercise\nCarryout the following steps to clean and save the San Francisco Weather data. Make sure to download and add the data file to your portfolio repository as instructed.\nCodeweather &lt;- read_csv(\"data/raw/weather.csv\")\nCodeweather_new &lt;- weather |&gt; \n    mutate(PrecipYr = na_if(PrecipYr, 99999))\n3 & 4.\nCodeweather_new &lt;- weather_new |&gt; \n    arrange(Month, Day) |&gt; \n    mutate(dateInYear = 1:365)\nCodemonths &lt;- tibble(\n    Month = 1:12,\n    month_name = month.abb)\nCodeweather_new &lt;- weather_new |&gt; \n    left_join(months)\nCodewrite_csv(weather_new, file = \"data/processed/weather_new.csv\")",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -105,7 +116,7 @@
     "text": "Read in the weather data in this file with the correct relative file path after you move it to the instructed location.\nThere is a variable that has values that don’t make sense in the data context. Figure out which variable this is and clean it up by making those values missing using na_if().\nCreate a variable called dateInYear that indicates the day of the year (1-365) for each case. (Jan 1 should be 1, and Dec 31 should be 365).\nCreate a variable called month_name that shows the 3-letter abbreviation for each case.\nSave the wrangled data to the data/processed/ folder using write_csv(). Name this file weather_clean.csv. Look up the documentation for this function by typing ?write_csv in the Console. You’ll need to write an appropriate relative path.",
     "crumbs": [
       "In-Class Activities",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Cleaning SFO Weather Data</span>"
     ]
   },
   {
@@ -116,7 +127,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Extra Sample 1</span>"
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 1</span>"
     ]
   },
   {
@@ -127,7 +138,7 @@
     "text": "Add content here",
     "crumbs": [
       "Extras",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Extra Sample 2</span>"
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Extra Sample 2</span>"
     ]
   }
 ]
