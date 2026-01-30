@@ -480,83 +480,57 @@ cookieconsent.run({
 </div>
 <section id="tidytuesday-section" class="level2"><h2 class="anchored" data-anchor-id="tidytuesday-section">TidyTuesday Section</h2>
 <p>Explore the week’s <a href="https://github.com/rfordatascience/tidytuesday">TidyTuesday</a> challenge. Develop a research question, then answer it through a short data story with <a href="?var:effective-viz-url">effective visualization(s)</a>. Provide sufficient background for readers to grasp your narrative.</p>
-<p><em>Research question:</em></p>
-<p>What factor drives the 10 companies with the highest share of capital stock in Brazil; the ownership qualifications, the company size, or the legal nature of the company?</p>
+<p><em>Research question:</em> How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?</p>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Cleaning the data </span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>top_companies <span class="ot">&lt;-</span> companies <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(capital_stock)) <span class="sc">%&gt;%</span>  </span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">275</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Ownership qualifications </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>owner_qualification <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">group_by</span>(owner_qualification) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">summarise</span>(<span class="at">total_capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> total_capital <span class="sc">/</span> <span class="fu">sum</span>(total_capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Company size </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Company size </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Legal nature </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Legal nature </span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
 <p><em>Visualizations</em></p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(company_size, total_share), <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by company size"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>       <span class="at">x =</span> <span class="st">"Company size"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(company_size, total_share))) <span class="sc">+</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital Share by Company Size"</span>, <span class="at">x =</span> <span class="st">"Share (%)"</span>, <span class="at">y =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(legal_nature, total_share))) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="at">title =</span> <span class="st">"Capital Share by Legal Nature"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>    <span class="at">x =</span> <span class="st">"Share (%)"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="at">y =</span> <span class="st">"Legal Nature"</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> legal_nature, <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by legal nature"</span>,</span>
-<span id="cb9-4"><a href="#cb9-4"></a>       <span class="at">x =</span> <span class="st">"Legal nature"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">50</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">ggplot</span>(owner_qualification, <span class="fu">aes</span>(<span class="at">x =</span> owner_qualification, <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by owner qualification"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4"></a>       <span class="at">x =</span> <span class="st">"Owner qualification"</span>,</span>
-<span id="cb10-5"><a href="#cb10-5"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1044,113 +1018,91 @@ cookieconsent.run({
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">---</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="an">title:</span><span class="co"> "Homework 01"</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">---</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="in">```{r}</span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="in">```</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a></span>
-<span id="cb11-13"><a href="#cb11-13"></a></span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="in">```{r}</span></span>
-<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#Method extracted from the repository</span></span>
-<span id="cb11-18"><a href="#cb11-18"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2026-01-27'</span>) </span>
-<span id="cb11-19"><a href="#cb11-19"></a><span class="in">```</span></span>
-<span id="cb11-20"><a href="#cb11-20"></a></span>
-<span id="cb11-23"><a href="#cb11-23"></a><span class="in">```{r}</span></span>
-<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#Method extracted from the repository</span></span>
-<span id="cb11-25"><a href="#cb11-25"></a>companies <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>companies</span>
-<span id="cb11-26"><a href="#cb11-26"></a>legal_nature <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>legal_nature</span>
-<span id="cb11-27"><a href="#cb11-27"></a>qualifications <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>qualifications</span>
-<span id="cb11-28"><a href="#cb11-28"></a>size <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>size</span>
-<span id="cb11-29"><a href="#cb11-29"></a><span class="in">```</span></span>
-<span id="cb11-30"><a href="#cb11-30"></a></span>
-<span id="cb11-31"><a href="#cb11-31"></a></span>
-<span id="cb11-32"><a href="#cb11-32"></a><span class="fu">## TidyTuesday Section</span></span>
-<span id="cb11-33"><a href="#cb11-33"></a></span>
-<span id="cb11-34"><a href="#cb11-34"></a>Explore the week's <span class="co">[</span><span class="ot">TidyTuesday</span><span class="co">](https://github.com/rfordatascience/tidytuesday)</span> challenge. Develop a research question, then answer it through a short data story with <span class="co">[</span><span class="ot">effective visualization(s)</span><span class="co">]({{&lt; var effective-viz-url &gt;}})</span>.  Provide sufficient background for readers to grasp your narrative.</span>
-<span id="cb11-35"><a href="#cb11-35"></a></span>
-<span id="cb11-36"><a href="#cb11-36"></a></span>
-<span id="cb11-37"><a href="#cb11-37"></a></span>
-<span id="cb11-38"><a href="#cb11-38"></a>*Research question:*</span>
-<span id="cb11-39"><a href="#cb11-39"></a></span>
-<span id="cb11-40"><a href="#cb11-40"></a>What factor drives the 10 companies with the highest share of capital stock in Brazil; the ownership qualifications,  the company size, or the legal nature of the company? </span>
-<span id="cb11-41"><a href="#cb11-41"></a></span>
-<span id="cb11-44"><a href="#cb11-44"></a><span class="in">```{r}</span></span>
-<span id="cb11-45"><a href="#cb11-45"></a><span class="co"># Cleaning the data </span></span>
-<span id="cb11-46"><a href="#cb11-46"></a>top_companies <span class="ot">&lt;-</span> companies <span class="sc">%&gt;%</span></span>
-<span id="cb11-47"><a href="#cb11-47"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(capital_stock)) <span class="sc">%&gt;%</span>  </span>
-<span id="cb11-48"><a href="#cb11-48"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">100</span>)</span>
-<span id="cb11-49"><a href="#cb11-49"></a><span class="in">```</span></span>
-<span id="cb11-50"><a href="#cb11-50"></a></span>
-<span id="cb11-51"><a href="#cb11-51"></a></span>
-<span id="cb11-54"><a href="#cb11-54"></a><span class="in">```{r}</span></span>
-<span id="cb11-55"><a href="#cb11-55"></a><span class="co"># Ownership qualifications </span></span>
-<span id="cb11-56"><a href="#cb11-56"></a>owner_qualification <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb11-57"><a href="#cb11-57"></a>  <span class="fu">group_by</span>(owner_qualification) <span class="sc">%&gt;%</span></span>
-<span id="cb11-58"><a href="#cb11-58"></a>  <span class="fu">summarise</span>(<span class="at">total_capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-59"><a href="#cb11-59"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> total_capital <span class="sc">/</span> <span class="fu">sum</span>(total_capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-60"><a href="#cb11-60"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
-<span id="cb11-61"><a href="#cb11-61"></a><span class="in">```</span></span>
-<span id="cb11-62"><a href="#cb11-62"></a></span>
-<span id="cb11-63"><a href="#cb11-63"></a></span>
-<span id="cb11-66"><a href="#cb11-66"></a><span class="in">```{r}</span></span>
-<span id="cb11-67"><a href="#cb11-67"></a><span class="co"># Company size </span></span>
-<span id="cb11-68"><a href="#cb11-68"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb11-69"><a href="#cb11-69"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
-<span id="cb11-70"><a href="#cb11-70"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-71"><a href="#cb11-71"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-72"><a href="#cb11-72"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
-<span id="cb11-73"><a href="#cb11-73"></a><span class="in">```</span></span>
-<span id="cb11-74"><a href="#cb11-74"></a></span>
-<span id="cb11-75"><a href="#cb11-75"></a></span>
-<span id="cb11-78"><a href="#cb11-78"></a><span class="in">```{r}</span></span>
-<span id="cb11-79"><a href="#cb11-79"></a><span class="co"># Legal nature </span></span>
-<span id="cb11-80"><a href="#cb11-80"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb11-81"><a href="#cb11-81"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
-<span id="cb11-82"><a href="#cb11-82"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-83"><a href="#cb11-83"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-84"><a href="#cb11-84"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
-<span id="cb11-85"><a href="#cb11-85"></a><span class="in">```</span></span>
-<span id="cb11-86"><a href="#cb11-86"></a></span>
-<span id="cb11-87"><a href="#cb11-87"></a></span>
-<span id="cb11-88"><a href="#cb11-88"></a></span>
-<span id="cb11-89"><a href="#cb11-89"></a>*Visualizations*</span>
-<span id="cb11-90"><a href="#cb11-90"></a></span>
-<span id="cb11-93"><a href="#cb11-93"></a><span class="in">```{r}</span></span>
-<span id="cb11-94"><a href="#cb11-94"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(company_size, total_share), <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb11-95"><a href="#cb11-95"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb11-96"><a href="#cb11-96"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by company size"</span>,</span>
-<span id="cb11-97"><a href="#cb11-97"></a>       <span class="at">x =</span> <span class="st">"Company size"</span>,</span>
-<span id="cb11-98"><a href="#cb11-98"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb11-99"><a href="#cb11-99"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb11-100"><a href="#cb11-100"></a><span class="in">```</span></span>
-<span id="cb11-101"><a href="#cb11-101"></a></span>
-<span id="cb11-104"><a href="#cb11-104"></a><span class="in">```{r}</span></span>
-<span id="cb11-105"><a href="#cb11-105"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> legal_nature, <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb11-106"><a href="#cb11-106"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
-<span id="cb11-107"><a href="#cb11-107"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by legal nature"</span>,</span>
-<span id="cb11-108"><a href="#cb11-108"></a>       <span class="at">x =</span> <span class="st">"Legal nature"</span>,</span>
-<span id="cb11-109"><a href="#cb11-109"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb11-110"><a href="#cb11-110"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb11-111"><a href="#cb11-111"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">50</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb11-112"><a href="#cb11-112"></a><span class="in">```</span></span>
-<span id="cb11-113"><a href="#cb11-113"></a></span>
-<span id="cb11-116"><a href="#cb11-116"></a><span class="in">```{r}</span></span>
-<span id="cb11-117"><a href="#cb11-117"></a><span class="fu">ggplot</span>(owner_qualification, <span class="fu">aes</span>(<span class="at">x =</span> owner_qualification, <span class="at">y =</span> total_share)) <span class="sc">+</span></span>
-<span id="cb11-118"><a href="#cb11-118"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">fill =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
-<span id="cb11-119"><a href="#cb11-119"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital share among top 100 firms by owner qualification"</span>,</span>
-<span id="cb11-120"><a href="#cb11-120"></a>       <span class="at">x =</span> <span class="st">"Owner qualification"</span>,</span>
-<span id="cb11-121"><a href="#cb11-121"></a>       <span class="at">y =</span> <span class="st">"Share of capital stock (%)"</span>) <span class="sc">+</span></span>
-<span id="cb11-122"><a href="#cb11-122"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb11-123"><a href="#cb11-123"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
-<span id="cb11-124"><a href="#cb11-124"></a><span class="in">```</span></span>
-<span id="cb11-125"><a href="#cb11-125"></a></span>
-<span id="cb11-126"><a href="#cb11-126"></a></span>
-<span id="cb11-127"><a href="#cb11-127"></a></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-shortcodes="false"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">---</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="an">title:</span><span class="co"> "Homework 01"</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">---</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="in">```{r}</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="in">```</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="in">```{r}</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#Method extracted from the repository</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>tuesdata <span class="ot">&lt;-</span> tidytuesdayR<span class="sc">::</span><span class="fu">tt_load</span>(<span class="st">'2026-01-27'</span>) </span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="in">```</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="in">```{r}</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#Method extracted from the repository</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a>companies <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>companies</span>
+<span id="cb9-26"><a href="#cb9-26"></a>legal_nature <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>legal_nature</span>
+<span id="cb9-27"><a href="#cb9-27"></a>qualifications <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>qualifications</span>
+<span id="cb9-28"><a href="#cb9-28"></a>size <span class="ot">&lt;-</span> tuesdata<span class="sc">$</span>size</span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="in">```</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a></span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="fu">## TidyTuesday Section</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a></span>
+<span id="cb9-34"><a href="#cb9-34"></a>Explore the week's <span class="co">[</span><span class="ot">TidyTuesday</span><span class="co">](https://github.com/rfordatascience/tidytuesday)</span> challenge. Develop a research question, then answer it through a short data story with <span class="co">[</span><span class="ot">effective visualization(s)</span><span class="co">]({{&lt; var effective-viz-url &gt;}})</span>.  Provide sufficient background for readers to grasp your narrative.</span>
+<span id="cb9-35"><a href="#cb9-35"></a></span>
+<span id="cb9-36"><a href="#cb9-36"></a></span>
+<span id="cb9-37"><a href="#cb9-37"></a></span>
+<span id="cb9-38"><a href="#cb9-38"></a>*Research question:*</span>
+<span id="cb9-39"><a href="#cb9-39"></a>How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?</span>
+<span id="cb9-40"><a href="#cb9-40"></a></span>
+<span id="cb9-43"><a href="#cb9-43"></a><span class="in">```{r}</span></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="co"># Cleaning the data </span></span>
+<span id="cb9-45"><a href="#cb9-45"></a>top_companies <span class="ot">&lt;-</span> companies <span class="sc">%&gt;%</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(capital_stock)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb9-47"><a href="#cb9-47"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">275</span>)</span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="in">```</span></span>
+<span id="cb9-49"><a href="#cb9-49"></a></span>
+<span id="cb9-50"><a href="#cb9-50"></a></span>
+<span id="cb9-53"><a href="#cb9-53"></a><span class="in">```{r}</span></span>
+<span id="cb9-54"><a href="#cb9-54"></a><span class="co"># Company size </span></span>
+<span id="cb9-55"><a href="#cb9-55"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<span id="cb9-56"><a href="#cb9-56"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
+<span id="cb9-57"><a href="#cb9-57"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-58"><a href="#cb9-58"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-59"><a href="#cb9-59"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="in">```</span></span>
+<span id="cb9-61"><a href="#cb9-61"></a></span>
+<span id="cb9-62"><a href="#cb9-62"></a></span>
+<span id="cb9-65"><a href="#cb9-65"></a><span class="in">```{r}</span></span>
+<span id="cb9-66"><a href="#cb9-66"></a><span class="co"># Legal nature </span></span>
+<span id="cb9-67"><a href="#cb9-67"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<span id="cb9-68"><a href="#cb9-68"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
+<span id="cb9-69"><a href="#cb9-69"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-70"><a href="#cb9-70"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-71"><a href="#cb9-71"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
+<span id="cb9-72"><a href="#cb9-72"></a><span class="in">```</span></span>
+<span id="cb9-73"><a href="#cb9-73"></a></span>
+<span id="cb9-74"><a href="#cb9-74"></a></span>
+<span id="cb9-75"><a href="#cb9-75"></a></span>
+<span id="cb9-76"><a href="#cb9-76"></a>*Visualizations*</span>
+<span id="cb9-77"><a href="#cb9-77"></a></span>
+<span id="cb9-78"><a href="#cb9-78"></a></span>
+<span id="cb9-81"><a href="#cb9-81"></a><span class="in">```{r}</span></span>
+<span id="cb9-82"><a href="#cb9-82"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(company_size, total_share))) <span class="sc">+</span></span>
+<span id="cb9-83"><a href="#cb9-83"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb9-84"><a href="#cb9-84"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital Share by Company Size"</span>, <span class="at">x =</span> <span class="st">"Share (%)"</span>, <span class="at">y =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
+<span id="cb9-85"><a href="#cb9-85"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb9-86"><a href="#cb9-86"></a><span class="in">```</span></span>
+<span id="cb9-87"><a href="#cb9-87"></a></span>
+<span id="cb9-90"><a href="#cb9-90"></a><span class="in">```{r}</span></span>
+<span id="cb9-91"><a href="#cb9-91"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(legal_nature, total_share))) <span class="sc">+</span></span>
+<span id="cb9-92"><a href="#cb9-92"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
+<span id="cb9-93"><a href="#cb9-93"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-94"><a href="#cb9-94"></a>    <span class="at">title =</span> <span class="st">"Capital Share by Legal Nature"</span>,</span>
+<span id="cb9-95"><a href="#cb9-95"></a>    <span class="at">x =</span> <span class="st">"Share (%)"</span>,</span>
+<span id="cb9-96"><a href="#cb9-96"></a>    <span class="at">y =</span> <span class="st">"Legal Nature"</span></span>
+<span id="cb9-97"><a href="#cb9-97"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-98"><a href="#cb9-98"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb9-99"><a href="#cb9-99"></a><span class="in">```</span></span>
+<span id="cb9-100"><a href="#cb9-100"></a></span>
+<span id="cb9-101"><a href="#cb9-101"></a></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
