@@ -1,0 +1,86 @@
+---
+title: "Homework 01"
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r}
+#Method extracted from the repository
+tuesdata <- tidytuesdayR::tt_load('2026-01-27') 
+```
+
+```{r}
+#Method extracted from the repository
+companies <- tuesdata$companies
+legal_nature <- tuesdata$legal_nature
+qualifications <- tuesdata$qualifications
+size <- tuesdata$size
+```
+
+
+## TidyTuesday Section
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story with [effective visualization(s)]({{< var effective-viz-url >}}).  Provide sufficient background for readers to grasp your narrative.
+
+
+
+*Research question:*
+How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?
+
+```{r}
+# Cleaning the data 
+top_companies <- companies %>%
+  arrange(desc(capital_stock)) %>%  
+  slice_head(n = 275)
+```
+
+
+```{r}
+# Company size 
+company_size <- top_companies %>%
+  group_by(company_size) %>%
+  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
+  mutate(total_share = capital / sum(capital) * 100) %>%
+  arrange(desc(total_share))
+```
+
+
+```{r}
+# Legal nature 
+legal_nature <- top_companies %>%
+  group_by(legal_nature) %>%
+  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
+  mutate(total_share = capital / sum(capital) * 100) %>%
+  arrange(desc(total_share))
+```
+
+
+
+*Visualizations*
+
+
+```{r}
+ggplot(company_size, aes(x = total_share, y = reorder(company_size, total_share))) +
+  geom_col(fill = "blue") +
+  labs(title = "Capital Share by Company Size", x = "Share (%)", y = "Company Size") +
+  theme_minimal()
+```
+
+```{r}
+ggplot(legal_nature, aes(x = total_share, y = reorder(legal_nature, total_share))) +
+  geom_col(fill = "green") +
+  labs(
+    title = "Capital Share by Legal Nature",
+    x = "Share (%)",
+    y = "Legal Nature"
+  ) +
+  theme_minimal()
+```
+
+
+
