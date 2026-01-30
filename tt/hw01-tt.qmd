@@ -11,10 +11,6 @@ library(tidyr)
 
 ```{r}
 #Method extracted from the repository
-install.packages("tidytuesdayR") 
-```
-```{r}
-#Method extracted from the repository
 tuesdata <- tidytuesdayR::tt_load('2026-01-27') 
 ```
 ```{r}
