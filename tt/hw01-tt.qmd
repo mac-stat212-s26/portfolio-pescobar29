@@ -39,22 +39,6 @@ top_companies <- companies %>%
   slice_head(n = 500)
 ```
 
-
-```{r}
-# Company size - Useful for the report
-size_info <- top_companies %>%
-  group_by(company_size) %>%
-  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
-  mutate(total_share = capital / sum(capital) * 100) %>%
-  arrange(desc(total_share))
-```
-
-
-```{r}
-size_info
-```
-
-
 *Visualizations*
 
 ```{r}
