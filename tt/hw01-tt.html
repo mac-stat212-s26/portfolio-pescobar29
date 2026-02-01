@@ -480,17 +480,17 @@ cookieconsent.run({
 </div>
 <section id="tidytuesday-section" class="level2"><h2 class="anchored" data-anchor-id="tidytuesday-section">TidyTuesday Section</h2>
 <p>Explore the week’s <a href="https://github.com/rfordatascience/tidytuesday">TidyTuesday</a> challenge. Develop a research question, then answer it through a short data story with <a href="?var:effective-viz-url">effective visualization(s)</a>. Provide sufficient background for readers to grasp your narrative.</p>
-<p><em>Research question:</em> How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?</p>
+<p><em>Research question:</em> How does a company’s size influence the type of legal category it chooses among Brazil’s top 500 firms?</p>
 <div class="cell">
 <details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Cleaning the data </span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>top_companies <span class="ot">&lt;-</span> companies <span class="sc">%&gt;%</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(capital_stock)) <span class="sc">%&gt;%</span>  </span>
-<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">275</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-4"><a href="#cb4-4"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">500</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Company size </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Company size - Useful for the report</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>size_info <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
 <span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
@@ -498,20 +498,38 @@ cookieconsent.run({
 </details>
 </div>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Legal nature </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>size_info</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  company_size     capital total_share
+  &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;
+1 small-enterprise 2.71e13       55.0 
+2 other            2.09e13       42.5 
+3 micro-enterprise 1.23e12        2.50</code></pre>
+</div>
 </div>
 <p><em>Visualizations</em></p>
 <div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(company_size, total_share))) <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital Share by Company Size"</span>, <span class="at">x =</span> <span class="st">"Share (%)"</span>, <span class="at">y =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>top_companies <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">fill =</span> legal_nature)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span> <span class="co">#Used in my final project for COMP112: User friendly</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="at">title =</span> <span class="st">"Does Size Influence Legal Structure?"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="at">subtitle =</span> <span class="st">"A proportional look at legal categories across the Top 500 Brazilian firms"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="at">x =</span> <span class="st">"Size Category"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="at">y =</span> <span class="st">"Proportion (%)"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10"></a>    <span class="at">fill =</span> <span class="st">"Legal Nature"</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-14"><a href="#cb8-14"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"lightgray"</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb8-15"><a href="#cb8-15"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb8-16"><a href="#cb8-16"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb8-17"><a href="#cb8-17"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb8-18"><a href="#cb8-18"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"italic"</span>),</span>
+<span id="cb8-19"><a href="#cb8-19"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb8-20"><a href="#cb8-20"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
@@ -519,22 +537,9 @@ cookieconsent.run({
 </div>
 </div>
 </div>
-<div class="cell">
-<details class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(legal_nature, total_share))) <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">labs</span>(</span>
-<span id="cb8-4"><a href="#cb8-4"></a>    <span class="at">title =</span> <span class="st">"Capital Share by Legal Nature"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>    <span class="at">x =</span> <span class="st">"Share (%)"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="at">y =</span> <span class="st">"Legal Nature"</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>  ) <span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details><div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="hw01-tt_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
+<p>The visualization reveals a clear distinction in the legal architecture of Brazil’s top 500 firms based on their size. At the Micro-enterprise level, legal structures are relatively homogeneous, consisting primarily of sole proprietorships and simple innovation models.</p>
+<p>As we progress to Small-enterprises, there is a significant shift toward the Limited Liability Business Company (LLC). This suggests that as a firm outgrows the ‘Micro’ stage, it typically adopts this more flexible structure to benefit from corporate liability protection.</p>
+<p>However, the most complex diversification occurs in the ‘Other’ category (representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, but as the companies expand in size and capital, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs.</p>
 
 
 <!-- -->
@@ -1050,19 +1055,19 @@ cookieconsent.run({
 <span id="cb9-36"><a href="#cb9-36"></a></span>
 <span id="cb9-37"><a href="#cb9-37"></a></span>
 <span id="cb9-38"><a href="#cb9-38"></a>*Research question:*</span>
-<span id="cb9-39"><a href="#cb9-39"></a>How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?</span>
+<span id="cb9-39"><a href="#cb9-39"></a>How does a company's size influence the type of legal category it chooses among Brazil’s top 500 firms?</span>
 <span id="cb9-40"><a href="#cb9-40"></a></span>
 <span id="cb9-43"><a href="#cb9-43"></a><span class="in">```{r}</span></span>
 <span id="cb9-44"><a href="#cb9-44"></a><span class="co"># Cleaning the data </span></span>
 <span id="cb9-45"><a href="#cb9-45"></a>top_companies <span class="ot">&lt;-</span> companies <span class="sc">%&gt;%</span></span>
 <span id="cb9-46"><a href="#cb9-46"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(capital_stock)) <span class="sc">%&gt;%</span>  </span>
-<span id="cb9-47"><a href="#cb9-47"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">275</span>)</span>
+<span id="cb9-47"><a href="#cb9-47"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">500</span>)</span>
 <span id="cb9-48"><a href="#cb9-48"></a><span class="in">```</span></span>
 <span id="cb9-49"><a href="#cb9-49"></a></span>
 <span id="cb9-50"><a href="#cb9-50"></a></span>
 <span id="cb9-53"><a href="#cb9-53"></a><span class="in">```{r}</span></span>
-<span id="cb9-54"><a href="#cb9-54"></a><span class="co"># Company size </span></span>
-<span id="cb9-55"><a href="#cb9-55"></a>company_size <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
+<span id="cb9-54"><a href="#cb9-54"></a><span class="co"># Company size - Useful for the report</span></span>
+<span id="cb9-55"><a href="#cb9-55"></a>size_info <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
 <span id="cb9-56"><a href="#cb9-56"></a>  <span class="fu">group_by</span>(company_size) <span class="sc">%&gt;%</span></span>
 <span id="cb9-57"><a href="#cb9-57"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb9-58"><a href="#cb9-58"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
@@ -1071,38 +1076,40 @@ cookieconsent.run({
 <span id="cb9-61"><a href="#cb9-61"></a></span>
 <span id="cb9-62"><a href="#cb9-62"></a></span>
 <span id="cb9-65"><a href="#cb9-65"></a><span class="in">```{r}</span></span>
-<span id="cb9-66"><a href="#cb9-66"></a><span class="co"># Legal nature </span></span>
-<span id="cb9-67"><a href="#cb9-67"></a>legal_nature <span class="ot">&lt;-</span> top_companies <span class="sc">%&gt;%</span></span>
-<span id="cb9-68"><a href="#cb9-68"></a>  <span class="fu">group_by</span>(legal_nature) <span class="sc">%&gt;%</span></span>
-<span id="cb9-69"><a href="#cb9-69"></a>  <span class="fu">summarise</span>(<span class="at">capital =</span> <span class="fu">sum</span>(capital_stock, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb9-70"><a href="#cb9-70"></a>  <span class="fu">mutate</span>(<span class="at">total_share =</span> capital <span class="sc">/</span> <span class="fu">sum</span>(capital) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-71"><a href="#cb9-71"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(total_share))</span>
-<span id="cb9-72"><a href="#cb9-72"></a><span class="in">```</span></span>
-<span id="cb9-73"><a href="#cb9-73"></a></span>
-<span id="cb9-74"><a href="#cb9-74"></a></span>
-<span id="cb9-75"><a href="#cb9-75"></a></span>
-<span id="cb9-76"><a href="#cb9-76"></a>*Visualizations*</span>
-<span id="cb9-77"><a href="#cb9-77"></a></span>
-<span id="cb9-78"><a href="#cb9-78"></a></span>
-<span id="cb9-81"><a href="#cb9-81"></a><span class="in">```{r}</span></span>
-<span id="cb9-82"><a href="#cb9-82"></a><span class="fu">ggplot</span>(company_size, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(company_size, total_share))) <span class="sc">+</span></span>
-<span id="cb9-83"><a href="#cb9-83"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
-<span id="cb9-84"><a href="#cb9-84"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Capital Share by Company Size"</span>, <span class="at">x =</span> <span class="st">"Share (%)"</span>, <span class="at">y =</span> <span class="st">"Company Size"</span>) <span class="sc">+</span></span>
-<span id="cb9-85"><a href="#cb9-85"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb9-86"><a href="#cb9-86"></a><span class="in">```</span></span>
-<span id="cb9-87"><a href="#cb9-87"></a></span>
-<span id="cb9-90"><a href="#cb9-90"></a><span class="in">```{r}</span></span>
-<span id="cb9-91"><a href="#cb9-91"></a><span class="fu">ggplot</span>(legal_nature, <span class="fu">aes</span>(<span class="at">x =</span> total_share, <span class="at">y =</span> <span class="fu">reorder</span>(legal_nature, total_share))) <span class="sc">+</span></span>
-<span id="cb9-92"><a href="#cb9-92"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"green"</span>) <span class="sc">+</span></span>
-<span id="cb9-93"><a href="#cb9-93"></a>  <span class="fu">labs</span>(</span>
-<span id="cb9-94"><a href="#cb9-94"></a>    <span class="at">title =</span> <span class="st">"Capital Share by Legal Nature"</span>,</span>
-<span id="cb9-95"><a href="#cb9-95"></a>    <span class="at">x =</span> <span class="st">"Share (%)"</span>,</span>
-<span id="cb9-96"><a href="#cb9-96"></a>    <span class="at">y =</span> <span class="st">"Legal Nature"</span></span>
-<span id="cb9-97"><a href="#cb9-97"></a>  ) <span class="sc">+</span></span>
-<span id="cb9-98"><a href="#cb9-98"></a>  <span class="fu">theme_minimal</span>()</span>
-<span id="cb9-99"><a href="#cb9-99"></a><span class="in">```</span></span>
+<span id="cb9-66"><a href="#cb9-66"></a>size_info</span>
+<span id="cb9-67"><a href="#cb9-67"></a><span class="in">```</span></span>
+<span id="cb9-68"><a href="#cb9-68"></a></span>
+<span id="cb9-69"><a href="#cb9-69"></a></span>
+<span id="cb9-70"><a href="#cb9-70"></a>*Visualizations*</span>
+<span id="cb9-71"><a href="#cb9-71"></a></span>
+<span id="cb9-74"><a href="#cb9-74"></a><span class="in">```{r}</span></span>
+<span id="cb9-75"><a href="#cb9-75"></a>top_companies <span class="sc">|&gt;</span> </span>
+<span id="cb9-76"><a href="#cb9-76"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> company_size, <span class="at">fill =</span> legal_nature)) <span class="sc">+</span></span>
+<span id="cb9-77"><a href="#cb9-77"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb9-78"><a href="#cb9-78"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"viridis"</span>) <span class="sc">+</span> <span class="co">#Used in my final project for COMP112: User friendly</span></span>
+<span id="cb9-79"><a href="#cb9-79"></a>  <span class="fu">labs</span>(</span>
+<span id="cb9-80"><a href="#cb9-80"></a>    <span class="at">title =</span> <span class="st">"Does Size Influence Legal Structure?"</span>,</span>
+<span id="cb9-81"><a href="#cb9-81"></a>    <span class="at">subtitle =</span> <span class="st">"A proportional look at legal categories across the Top 500 Brazilian firms"</span>,</span>
+<span id="cb9-82"><a href="#cb9-82"></a>    <span class="at">x =</span> <span class="st">"Size Category"</span>,</span>
+<span id="cb9-83"><a href="#cb9-83"></a>    <span class="at">y =</span> <span class="st">"Proportion (%)"</span>,</span>
+<span id="cb9-84"><a href="#cb9-84"></a>    <span class="at">fill =</span> <span class="st">"Legal Nature"</span></span>
+<span id="cb9-85"><a href="#cb9-85"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-86"><a href="#cb9-86"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb9-87"><a href="#cb9-87"></a>  <span class="fu">theme</span>(</span>
+<span id="cb9-88"><a href="#cb9-88"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"lightgray"</span>, <span class="at">color =</span> <span class="st">"black"</span>),</span>
+<span id="cb9-89"><a href="#cb9-89"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb9-90"><a href="#cb9-90"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb9-91"><a href="#cb9-91"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb9-92"><a href="#cb9-92"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">"italic"</span>),</span>
+<span id="cb9-93"><a href="#cb9-93"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb9-94"><a href="#cb9-94"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span>
+<span id="cb9-95"><a href="#cb9-95"></a><span class="in">```</span></span>
+<span id="cb9-96"><a href="#cb9-96"></a></span>
+<span id="cb9-97"><a href="#cb9-97"></a>The visualization reveals a clear distinction in the legal architecture of Brazil’s top 500 firms based on their size. At the Micro-enterprise level, legal structures are relatively homogeneous, consisting primarily of sole proprietorships and simple innovation models.</span>
+<span id="cb9-98"><a href="#cb9-98"></a></span>
+<span id="cb9-99"><a href="#cb9-99"></a>As we progress to Small-enterprises, there is a significant shift toward the Limited Liability Business Company (LLC). This suggests that as a firm outgrows the 'Micro' stage, it typically adopts this more flexible structure to benefit from corporate liability protection.</span>
 <span id="cb9-100"><a href="#cb9-100"></a></span>
-<span id="cb9-101"><a href="#cb9-101"></a></span>
+<span id="cb9-101"><a href="#cb9-101"></a>However, the most complex diversification occurs in the 'Other' category (representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, but as the companies expand in size and capital, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs.</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
