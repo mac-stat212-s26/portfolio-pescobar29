@@ -30,19 +30,19 @@ Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
 
 
 *Research question:*
-How does the distribution of capital stock among Brazil’s top 275 companies vary by company size and legal nature?
+How does a company's size influence the type of legal category it chooses among Brazil’s top 500 firms?
 
 ```{r}
 # Cleaning the data 
 top_companies <- companies %>%
   arrange(desc(capital_stock)) %>%  
-  slice_head(n = 275)
+  slice_head(n = 500)
 ```
 
 
 ```{r}
-# Company size 
-company_size <- top_companies %>%
+# Company size - Useful for the report
+size_info <- top_companies %>%
   group_by(company_size) %>%
   summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
   mutate(total_share = capital / sum(capital) * 100) %>%
@@ -51,36 +51,38 @@ company_size <- top_companies %>%
 
 
 ```{r}
-# Legal nature 
-legal_nature <- top_companies %>%
-  group_by(legal_nature) %>%
-  summarise(capital = sum(capital_stock, na.rm = TRUE)) %>%
-  mutate(total_share = capital / sum(capital) * 100) %>%
-  arrange(desc(total_share))
+size_info
 ```
-
 
 
 *Visualizations*
 
-
 ```{r}
-ggplot(company_size, aes(x = total_share, y = reorder(company_size, total_share))) +
-  geom_col(fill = "blue") +
-  labs(title = "Capital Share by Company Size", x = "Share (%)", y = "Company Size") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(legal_nature, aes(x = total_share, y = reorder(legal_nature, total_share))) +
-  geom_col(fill = "green") +
+top_companies |> 
+ggplot(aes(x = company_size, fill = legal_nature)) +
+  geom_bar(position = "fill") +
+  scale_fill_viridis_d(option = "viridis") + #Used in my final project for COMP112: User friendly
   labs(
-    title = "Capital Share by Legal Nature",
-    x = "Share (%)",
-    y = "Legal Nature"
+    title = "Does Size Influence Legal Structure?",
+    subtitle = "A proportional look at legal categories across the Top 500 Brazilian firms",
+    x = "Size Category",
+    y = "Proportion (%)",
+    fill = "Legal Nature"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightgray", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic"),
+    legend.position = "bottom",
+    legend.text = element_text(size = 7))
 ```
 
+The visualization reveals a clear distinction in the legal architecture of Brazil’s top 500 firms based on their size. At the Micro-enterprise level, legal structures are relatively homogeneous, consisting primarily of sole proprietorships and simple innovation models.
 
+As we progress to Small-enterprises, there is a significant shift toward the Limited Liability Business Company (LLC). This suggests that as a firm outgrows the 'Micro' stage, it typically adopts this more flexible structure to benefit from corporate liability protection.
+
+However, the most complex diversification occurs in the 'Other' category (representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, but as the companies expand in size and capital, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs.
 
