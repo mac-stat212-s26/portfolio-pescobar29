@@ -2,6 +2,10 @@
 title: "3 Adv Data Viz"
 ---
 
+```{r}
+library(ggplot2)
+```
+
 
 ## 🧩 Learning Goals
 
@@ -130,12 +134,17 @@ Look at the [`geom_linerange` documentation page](https://ggplot2.tidyverse.org/
 
 ![SFO Weather Records in 2011](https://hash-mac.github.io/stat212site-sp26/images/sfo_first_graph.png)
 
+
 ```{r weather_plot_temp_records}
-ggplot(weather) +
-    theme_classic()
+weather %>% 
+ggplot(aes(x = dateInYear)) +
+  geom_linerange(aes(ymin = RecordLow, ymax = RecordHigh), color = "#ECEBE3") +
+  labs(
+    title = "SFO Weather Records in 2011",
+    x = "Day of Year",
+    y = "Temperature (°F)") +
+  theme_classic()
 ```
-
-
 
 ::: {.callout-tip title="Keyboard Shortcuts"}
 As you work on this plot, try to use some new [keyboard shortcuts](https://hash-mac.github.io/stat212site-sp26/notes/keyboard.html). Focus on the following:
@@ -145,9 +154,6 @@ As you work on this plot, try to use some new [keyboard shortcuts](https://hash-
 - Run current line/currently selected lines: `Ctrl+Enter` (Windows). `Command+Return` (Mac).
 :::
 
-```{r}
-
-```
 
 
 ## Exercise 3
@@ -157,40 +163,16 @@ In your visualization, also display the usual temperatures (`NormalLow` and `Nor
 ![SFO observed, Average, and Record Daily Temperatures in 2011](https://hash-mac.github.io/stat212site-sp26/images/sfo_second_graph.png)
 
 ```{r weather_plot_temp_all}
-GeomLinerange <- ggproto(
-  "GeomLinerange", Geom,
-
-  default_aes = GeomPath$default_aes,
-
-  draw_key = draw_key_linerange,
-
-  required_aes = c("x|y", "ymin|xmin", "ymax|xmax"),
-
-  setup_params = function(data, params) {
-    params$flipped_aes <- has_flipped_aes(data, params, range_is_orthogonal = TRUE)
-    # if flipped_aes == TRUE then y, xmin, xmax is present
-    if (!(params$flipped_aes || all(c("x", "ymin", "ymax") %in% c(names(data), names(params))))) {
-      cli::cli_abort("Either, {.field x}, {.field ymin}, and {.field ymax} {.emph or} {.field y}, {.field xmin}, and {.field xmax} must be supplied.")
-    }
-    params
-  },
-
-  extra_params = c("na.rm", "orientation"),
-
-  setup_data = function(data, params) {
-    data$flipped_aes <- params$flipped_aes
-    data
-  },
-
-  draw_panel = function(data, panel_params, coord, lineend = "butt", flipped_aes = FALSE, na.rm = FALSE) {
-    data <- flip_data(data, flipped_aes)
-    data <- transform(data, xend = x, y = ymin, yend = ymax)
-    data <- flip_data(data, flipped_aes)
-    ggname("geom_linerange", GeomSegment$draw_panel(data, panel_params, coord, lineend = lineend, na.rm = na.rm))
-  },
-
-  rename_size = TRUE
-)
+weather %>% 
+ggplot(aes(x = dateInYear)) +
+  geom_linerange(aes(ymin = RecordLow, ymax = RecordHigh), color = "#ECEBE3") +
+  geom_linerange(aes(ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA") +
+  geom_linerange(aes(ymin = Low, ymax = High), color = "#A90248") +
+ labs(
+    title = "SFO Weather Records in 2011",
+    x = "Day of Year",
+    y = "Temperature (°F)") +
+   theme_classic()
 ```
 
 
@@ -201,11 +183,26 @@ If you'd like finer control of the width of these lines/rectangles, check out th
 
 ## Exercise 4
 
-Recreate the visual demarcations of the months by adding vertical lines separating the months.  Brainstorm how we might draw those vertical lines. What `geom` might we use?  What subset of the data might we use in that `geom` layer to draw lines only at the month divisions? 
+Recreate the visual demarcations of the months by adding vertical lines separating the months.  Brainstorm how we might draw those vertical lines. What `geom` might we use?  What subset of the data might we use in that `geom` layer to draw lines only at the month divisions?
+
+```{r}
+month_data <- weather %>% 
+  filter(Day == 1)
+```
+
 
 ```{r }
-
-
+weather %>% 
+ggplot(aes(x = dateInYear)) +
+  geom_vline(data = month_data, aes(xintercept = dateInYear), alpha = 0.2) +
+  geom_linerange(aes(ymin = RecordLow, ymax = RecordHigh), color = "#ECEBE3") +
+  geom_linerange(aes(ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA") +
+  geom_linerange(aes(ymin = Low, ymax = High), color = "#A90248") +
+ labs(
+    title = "SFO Weather Records in 2011",
+    x = "Day of Year",
+    y = "Temperature (°F)") +
+    theme_classic() 
 ```
 
 
@@ -224,6 +221,28 @@ Try to figuring out this new challenge using search engines and LLMs:
 - **Search Engines.** Use Google to search for possible solutions using the jargon that is most likely to return the most relevant results. Record search queries and your thought process in selecting which search results to look at first.
 
 - **LLMs.** Use [ChatGPT](https://chat.openai.com/) or [Gemini](https://gemini.google.com/) with prompts that will most efficiently get you the desired results. Record the chat prompts used and output given. Evaluate the output. Do you fully understand the code generated? How can you tell that the generated code is correct?
+
+```{r}
+month_labels <- weather %>% 
+  group_by(Month) %>% 
+  summarise(middle = mean(dateInYear))
+```
+
+
+```{r}
+weather %>% 
+ggplot(aes(x = dateInYear)) +
+  geom_vline(data = month_data, aes(xintercept = dateInYear), alpha = 0.2) +
+  geom_linerange(aes(ymin = RecordLow, ymax = RecordHigh), color = "#ECEBE3") +
+  geom_linerange(aes(ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA") +
+  geom_linerange(aes(ymin = Low, ymax = High), color = "#A90248") +
+ labs(
+    title = "SFO Weather Records in 2011",
+    x = "Day of Year",
+    y = "Temperature (°F)") +
+    theme_classic() +
+    scale_x_continuous(breaks = month_labels$middle, labels = month.abb)
+```
 
 
 ## Exercise 6 
