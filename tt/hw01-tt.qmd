@@ -30,7 +30,7 @@ Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
 
 
 *Research question:*
-How does a company's size influence the type of legal category it chooses among Brazil’s top 500 firms?
+How does a company's size influence the type of legal nature it has among Brazil’s top 500 firms?
 
 ```{r}
 # Cleaning the data 
