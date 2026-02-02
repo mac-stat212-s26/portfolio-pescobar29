@@ -47,8 +47,9 @@ ggplot(aes(x = company_size, fill = legal_nature)) +
   geom_bar(position = "fill") +
   scale_fill_viridis_d(option = "viridis") + #Used in my final project for COMP112: User friendly
   labs(
-    title = "Does Size Influence Legal Structure?",
-    subtitle = "A proportional look at legal categories across the Top 500 Brazilian firms",
+    title = "Does Size Influence Legal Nature?",
+    subtitle = "A proportional look at legal nature across the Top 500 Brazilian firms",
+    caption = "Source: TidyTuesday Challenge Week 4, 2026. Author: Patricia Escobar",
     x = "Size Category",
     y = "Proportion (%)",
     fill = "Legal Nature"
@@ -69,5 +70,4 @@ The visualization reveals a clear distinction in the legal architecture of Brazi
 
 As we progress to Small-enterprises, there is a significant shift toward the Limited Liability Business Company (LLC). This suggests that as a firm outgrows the 'Micro' stage, it typically adopts this more flexible structure to benefit from corporate liability protection.
 
-However, the most complex diversification occurs in the 'Other' category (representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, but as the companies expand in size and capital, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs.
-
+However, the most complex diversification occurs in the 'Other' category (supposedly representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, then, when the companies expand,  almost all of them are identify as LLC. However, as the companies expand even more in capital and size, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs, as seen in the plot.
