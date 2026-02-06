@@ -329,6 +329,11 @@ seven_countyarea <- mn_counties |>
     filter(name %in% c("Anoka", "Hennepin", "Ramsey", "Dakota", "Carver", "Washington", "Scott")) |> 
     st_bbox()
 seven_countyarea
+```
+
+```{r}
+#sf version: 1.0-19
+#elevatr version: 0.99.0
 
 elevation <- elevatr::get_elev_raster(mn_counties |> st_crop(seven_countyarea), z = 9, clip = "bbox")
 raster::crs(elevation) <- sf::st_crs(mn_counties)
@@ -357,7 +362,9 @@ ggplot() +
 Let's add to the above code chunk to save the map above to an image file called `tc_map_zoom.png` in the `figures` folder. The code example below shows a general template for saving a plot to file. Choose a reasonable width and height. (There are also `jpeg()` and `pdf()` functions for writing images.)
 
 ```{r save_plot_example, eval=FALSE}
-png("relative path to image", width = width_in_pixels, height = height_in_pixels)
+
+png("../figures/tc_map_zoom.png", width = 800, height = 500)
+
 # Code for creating plot
 dev.off()
 ```
