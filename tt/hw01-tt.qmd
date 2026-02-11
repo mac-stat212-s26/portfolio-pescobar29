@@ -1,0 +1,73 @@
+---
+title: "Homework 01"
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+```
+
+
+```{r}
+#Method extracted from the repository
+tuesdata <- tidytuesdayR::tt_load('2026-01-27') 
+```
+
+```{r}
+#Method extracted from the repository
+companies <- tuesdata$companies
+legal_nature <- tuesdata$legal_nature
+qualifications <- tuesdata$qualifications
+size <- tuesdata$size
+```
+
+
+## TidyTuesday Section
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story with [effective visualization(s)]({{< var effective-viz-url >}}).  Provide sufficient background for readers to grasp your narrative.
+
+
+
+*Research question:*
+What is the relationship between company size and legal nature among Brazil’s top 500 firms?
+
+```{r}
+# Cleaning the data 
+top_companies <- companies %>%
+  arrange(desc(capital_stock)) %>%  
+  slice_head(n = 500)
+```
+
+*Visualizations*
+
+```{r}
+top_companies |> 
+ggplot(aes(x = company_size, fill = legal_nature)) +
+  geom_bar(position = "fill") +
+  scale_fill_viridis_d(option = "viridis") + #Used in my final project for COMP112: User friendly
+  labs(
+    title = "Does Size Influence Legal Nature?",
+    subtitle = "A proportional look at legal nature across the Top 500 Brazilian firms",
+    caption = "Source: TidyTuesday Challenge Week 4, 2026. Author: Patricia Escobar",
+    x = "Size Category",
+    y = "Proportion (%)",
+    fill = "Legal Nature"
+  ) +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "white", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic"),
+    legend.position = "bottom",
+    legend.text = element_text(size = 7)) + 
+    theme_minimal() 
+```
+
+The visualization reveals a clear distinction in the legal architecture of Brazil’s top 500 firms based on their size. At the Micro-enterprise level, legal structures are relatively homogeneous, consisting primarily of sole proprietorships and simple innovation models.
+
+As we progress to Small-enterprises, there is a significant shift toward the Limited Liability Business Company (LLC). This suggests that as a firm outgrows the 'Micro' stage, it typically adopts this more flexible structure to benefit from corporate liability protection.
+
+However, the most complex diversification occurs in the 'Other' category (supposedly representing the largest firms). While the LLC structure remains prevalent, this group introduces much more sophisticated ownership models, such as Privately Held Corporations and Publicly Traded Corporations. This evidence suggests a direct correlation between scale and complexity: in the beginning, very small firms tend to rely on simpler ownership structures, then, when the companies expand,  almost all of them are identify as LLC. However, as the companies expand even more in capital and size, they inevitably transition into more robust legal frameworks to manage greater regulatory requirements and investment needs, as seen in the plot.
