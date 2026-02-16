@@ -308,13 +308,11 @@ str_view(fruit, "aa|ee|ii|oo|uu")
 **Exercise:** Using the `words` data, find (1) words that start with "y" and (2) words that don't start with "y".
 
 ```{r ex_regex_start_end_group}
-# Your code
 # Words that start with y
 str_view(words, "^y")
 
 # Words that don't start with y
 str_view(words, "^[^y]")
-
 ```
 
 
