@@ -80,6 +80,7 @@ book:
       - ica/ica-sample2.qmd
       - ica/cleaning.qmd
       - ica/06-wrangling-1-notes.qmd
+      - ica/07-wrangling-2-notes.qmd
 
     - part: "Extras"
       chapters:
