@@ -25,7 +25,6 @@ By the end of this lesson, you should be able to:
 
 ```{r}
 install.packages(c("sf","elevatr","terra","stars","tidycensus"))
-
 install.packages('devtools')
 devtools::install_github("ropensci/USAboundaries")
 install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev", type = "source")
@@ -37,19 +36,6 @@ install.packages("USAboundariesData", repos = "https://ropensci.r-universe.dev",
 
 For this activity, create the following directory structure in your portfolio repository under `src/ica` folder:
 
-
-```markdown
-portfolio
-└─ src
-   └─ ica
-      └─ 04_adv_maps
-         ├─ code
-         │  └─ 04-adv-maps-1-notes.qmd
-         ├─ data
-         │  └─ ...  ← saving data here during this activity
-         └─ figures
-            └─ ...  ← saving created maps here during this activity
-```
 
 First load required packages.
 
