@@ -39,7 +39,6 @@ plot_data <- sfi_grants %>%
 ```
 
 
-
 ```{r}
 ggplot(plot_data, aes(y = reorder(programme_name, total_commitment), x = total_commitment, 
   fill = total_commitment)) +
@@ -47,13 +46,14 @@ ggplot(plot_data, aes(y = reorder(programme_name, total_commitment), x = total_c
   scale_fill_viridis_c() +
   scale_x_continuous(labels = label_dollar(prefix = "€", scale_cut = cut_short_scale())) +
   labs(
-    title = "Top 20 Research Bodies by Total Funding",
-    subtitle = "Based on current total commitment across all programs",
+    title = "Research Bodies by Total Funding",
+    subtitle = "20 research bodies that have received more funding over the years",
+    caption = "Source: Ireland's Open Data Portal, 2026. Author: Patricia Escobar",
     x = "Total Investment (EUR)",
     y = "Research Institution",
     fill = "Total Funding") +
   theme_minimal() +
-  theme(axis.text.y = element_text(face = "bold", size = 7))
+  theme(axis.text.y = element_text(face = "bold", size = 6))
 ```
 
 

@@ -48,7 +48,7 @@ ggplot(aes(x = company_size, fill = legal_nature)) +
   scale_fill_viridis_d(option = "viridis") + #Used in my final project for COMP112: User friendly
   labs(
     title = "Does Size Influence Legal Nature?",
-    subtitle = "A proportional look at legal nature across the Top 500 Brazilian firms",
+    subtitle = "Legal nature across the Top 500 Brazilian firms",
     caption = "Source: TidyTuesday Challenge Week 4, 2026. Author: Patricia Escobar",
     x = "Size Category",
     y = "Proportion (%)",
