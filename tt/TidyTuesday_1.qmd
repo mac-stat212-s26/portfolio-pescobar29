@@ -47,7 +47,7 @@ ggplot(plot_data, aes(y = reorder(programme_name, total_commitment), x = total_c
   scale_x_continuous(labels = label_dollar(prefix = "€", scale_cut = cut_short_scale())) +
   labs(
     title = "Research Bodies by Total Funding",
-    subtitle = "20 research bodies that have received more funding over the years",
+    subtitle = "The 20 most funded research bodies over time",
     caption = "Source: Ireland's Open Data Portal, 2026. Author: Patricia Escobar",
     x = "Total Investment (EUR)",
     y = "Research Institution",
