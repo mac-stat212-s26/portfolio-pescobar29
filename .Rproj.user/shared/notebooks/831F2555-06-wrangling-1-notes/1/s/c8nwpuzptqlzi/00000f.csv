@@ -1,0 +1,3 @@
+"0","ggplot(relig_summary, aes(x = tvhours, y = fct_reorder(relig, tvhours))) +"
+"0","    geom_point() +"
+"0","    theme_classic()"

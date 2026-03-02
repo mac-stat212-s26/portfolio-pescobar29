@@ -1,0 +1,59 @@
+{
+  "index.qmd": {
+    "index.html": "99b9cd08"
+  },
+  "pv/pv-01.qmd": {
+    "pv-01.html": "903fc029"
+  },
+  "tt/2025-07-08.qmd": {
+    "2025-07-08.html": "b0550c1f"
+  },
+  "tt/2025-07-15.qmd": {
+    "2025-07-15.html": "9c9c7ed8"
+  },
+  "pcl/pcl.qmd": {
+    "pcl.html": "fd6ebe11"
+  },
+  "ica/ica-sample1.qmd": {
+    "ica-sample1.html": "aec55e3d"
+  },
+  "ica/ica-sample2.qmd": {
+    "ica-sample2.html": "89b0821f"
+  },
+  "ica/cleaning.qmd": {
+    "cleaning.html": "290f6eec"
+  },
+  "extra/extra-sample1.qmd": {
+    "extra-sample1.html": "96d0bd52"
+  },
+  "extra/extra-sample2.qmd": {
+    "extra-sample2.html": "1ec72d66"
+  },
+  "404.qmd": {
+    "404.html": "b8e2a8cf"
+  },
+  "tt/hw01-tt.qmd": {
+    "hw01-tt.html": "6a7fc66a"
+  },
+  "ica/06-wrangling-1-notes.qmd": {
+    "06-wrangling-1-notes.html": "831cd19c"
+  },
+  "ica/07-wrangling-2-notes/07-wrangling-2-notes.qmd": {
+    "07-wrangling-2-notes.html": "43a2d206"
+  },
+  "ica/08-missing-data-notes.qmd": {
+    "08-missing-data-notes.html": "2092c7fb"
+  },
+  "ica/09-functions-notes.qmd": {
+    "09-functions-notes.html": "e3c0de01"
+  },
+  "ica/03-adv-ggplot-notes.qmd": {
+    "03-adv-ggplot-notes.html": "fa1dd196"
+  },
+  "ica/04_ad_maps/code/04-adv-maps-1-notes.qmd": {
+    "04-adv-maps-1-notes.html": "d584aeaf"
+  },
+  "tt/TidyTuesday#1.qmd": {
+    "TidyTuesday#1.html": "d3ab74d0"
+  }
+}

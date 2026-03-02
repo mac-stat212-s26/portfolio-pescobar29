@@ -1,0 +1,6 @@
+"0",""
+"0","df |>"
+"0","    mutate("
+"0","        full_name1 = str_c(first_name, "" "", last_name),"
+"0","        full_name2 = str_glue(""{first_name} {last_name}"")"
+"0","    )"

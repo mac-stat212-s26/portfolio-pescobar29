@@ -1,0 +1,7 @@
+"0","count_prop <- function(df, count_vars) {"
+"0","    df |>"
+"0","        count(pick({{ count_vars }})) |>"
+"0","        mutate(prop = n/sum(n))"
+"0","}"
+"0",""
+"0","count_prop(diamonds, count_vars = cut)"

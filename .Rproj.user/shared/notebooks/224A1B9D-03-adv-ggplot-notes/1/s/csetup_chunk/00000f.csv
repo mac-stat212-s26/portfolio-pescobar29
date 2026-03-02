@@ -1,0 +1,2 @@
+"0","library(tidyverse)"
+"0","weather <- read_csv(""https://mac-stat.github.io/data/sfo_weather.csv"")"

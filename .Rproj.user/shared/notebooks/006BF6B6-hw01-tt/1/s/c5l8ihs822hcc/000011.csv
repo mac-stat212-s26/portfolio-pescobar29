@@ -1,0 +1,4 @@
+"0","# Cleaning the data "
+"0","top_companies <- companies %>%"
+"0","  arrange(desc(capital_stock)) %>%  "
+"0","  slice_head(n = 500)"

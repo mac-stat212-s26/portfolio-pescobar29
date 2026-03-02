@@ -1,0 +1,13 @@
+"0","# Defining a function"
+"0","function_name <- function(input_name_1, input_name_2 = default_value_2){"
+"0",""
+"0","  # function body - code that does something"
+"0",""
+"0","  return(output)"
+"0","}"
+"0",""
+"0","# Calling a function (all valid ways)"
+"0","function_name(input_name_1 = 2, input_name_2 = 4)"
+"2","Error in function_name(input_name_1 = 2, input_name_2 = 4) : 
+  object 'output' not found
+"

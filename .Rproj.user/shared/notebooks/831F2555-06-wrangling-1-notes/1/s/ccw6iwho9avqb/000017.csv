@@ -1,0 +1,4 @@
+"0","#4"
+"0","diamonds |> "
+"0","    filter(cut == ""Fair"") |> "
+"0","    summarize(high_any = any(price > 3000))"

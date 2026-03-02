@@ -1,0 +1,8 @@
+"0","average_new <- function(x, remove_nas = TRUE) {"
+"0","    sum(x, na.rm = remove_nas)/length(x)"
+"0","  fun_new_thing_within_function <- ""Fun times!"""
+"0","}"
+"0","average_new(1:3)"
+"0","fun_new_thing_within_function"
+"2","Error: object 'fun_new_thing_within_function' not found
+"

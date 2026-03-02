@@ -1,0 +1,3 @@
+"0","month_labels <- weather %>% "
+"0","  group_by(Month) %>% "
+"0","  summarise(middle = mean(dateInYear))"

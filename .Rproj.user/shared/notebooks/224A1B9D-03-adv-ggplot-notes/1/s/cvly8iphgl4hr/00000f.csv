@@ -1,0 +1,2 @@
+"0","month_data <- weather %>% "
+"0","  filter(Day == 1)"

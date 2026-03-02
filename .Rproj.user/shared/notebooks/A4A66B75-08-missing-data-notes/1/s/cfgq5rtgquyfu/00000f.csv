@@ -1,0 +1,3 @@
+"0","#| eval: true"
+"0","ggplot(airquality, aes(x = is.na(Ozone), y = Solar.R)) + "
+"0","    geom_boxplot()"

@@ -1,0 +1,7 @@
+"0","comments <- tibble("
+"0","    name = c(""Alice"", ""Bob""),"
+"0","    comment = c(""The essay was well organized around the core message and had good transitions."", ""Good job!""))"
+"0",""
+"0","comments |>"
+"0","    mutate("
+"0","        comment_length = str_length(comment))"

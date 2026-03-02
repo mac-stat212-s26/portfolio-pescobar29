@@ -1,0 +1,17 @@
+{
+  "hash": "351fff6c6d802f1150196b29f99aa250",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"TidyTuesday Challenge\"\nformat: html\n---\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(lubridate)\nlibrary(scales)\n```\n:::\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Using R\n# Option 1: tidytuesdayR R package \n## install.packages(\"tidytuesdayR\")\n\ntuesdata <- tidytuesdayR::tt_load('2026-02-24')\n## OR\ntuesdata <- tidytuesdayR::tt_load(2026, week = 8)\n\nsfi_grants <- tuesdata$sfi_grants\n\n# Option 2: Read directly from GitHub\n\nsfi_grants <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-02-24/sfi_grants.csv')\n```\n:::\n\n\nCleaning \n\n\n::: {.cell}\n\n```{.r .cell-code}\nplot_data <- sfi_grants %>%\n  group_by(programme_name) %>%\n  summarise(total_commitment = sum(current_total_commitment, na.rm = TRUE)) %>%\n  slice_max(total_commitment, n = 20)\n```\n:::\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(plot_data, aes(y = reorder(programme_name, total_commitment), x = total_commitment, \n  fill = total_commitment)) +\n  geom_col() +\n  scale_fill_viridis_c() +\n  scale_x_continuous(labels = label_dollar(prefix = \"€\", scale_cut = cut_short_scale())) +\n  labs(\n    title = \"Top 20 Research Bodies by Total Funding\",\n    subtitle = \"Based on current total commitment across all programs\",\n    x = \"Total Investment (EUR)\",\n    y = \"Research Institution\",\n    fill = \"Total Funding\") +\n  theme_minimal() +\n  theme(axis.text.y = element_text(face = \"bold\", size = 7))\n```\n\n::: {.cell-output-display}\n![](TidyTuesday-1_files/figure-html/unnamed-chunk-4-1.png){width=672}\n:::\n:::\n\n\n\n",
+    "supporting": [
+      "TidyTuesday-1_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

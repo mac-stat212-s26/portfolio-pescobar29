@@ -1,0 +1,4 @@
+"0","ggplot() + "
+"0","    geom_sf(data = mn_counties, fill = ""white"") +"
+"0","    geom_sf(data = mn_cities, size = 0.4) + "
+"0","    ggthemes::theme_map()"
