@@ -1,0 +1,59 @@
+---
+title: "TidyTuesday Challenge"
+format: html
+---
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+library(scales)
+```
+
+
+```{r}
+# Using R
+# Option 1: tidytuesdayR R package 
+## install.packages("tidytuesdayR")
+
+tuesdata <- tidytuesdayR::tt_load('2026-02-24')
+## OR
+tuesdata <- tidytuesdayR::tt_load(2026, week = 8)
+
+sfi_grants <- tuesdata$sfi_grants
+
+# Option 2: Read directly from GitHub
+
+sfi_grants <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-02-24/sfi_grants.csv')
+
+```
+
+Cleaning 
+
+```{r}
+plot_data <- sfi_grants %>%
+  group_by(programme_name) %>%
+  summarise(total_commitment = sum(current_total_commitment, na.rm = TRUE)) %>%
+  slice_max(total_commitment, n = 20)
+```
+
+
+```{r}
+ggplot(plot_data, aes(y = reorder(programme_name, total_commitment), x = total_commitment, 
+  fill = total_commitment)) +
+  geom_col() +
+  scale_fill_viridis_c() +
+  scale_x_continuous(labels = label_dollar(prefix = "€", scale_cut = cut_short_scale())) +
+  labs(
+    title = "Research Programs by Total Funding",
+    subtitle = "Capital Allocation Across Ireland’s Top 20 Research Programs",
+    caption = "Source: Ireland's Open Data Portal, 2026. Author: Patricia Escobar",
+    x = "Total Investment (EUR)",
+    y = "Research Institution",
+    fill = "Total Funding") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(face = "bold", size = 6))
+```
+
+
