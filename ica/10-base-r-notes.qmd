@@ -2,6 +2,18 @@
 title: "10 Base R"
 ---
 
+
+```{r}
+library(dplyr)
+library(jsonlite)
+library(purrr)
+library(stringr)
+library(ggplot2)
+library(forcats)
+library(tidyverse)
+```
+
+
 ## 🧩 Learning Goals
 
 By the end of this lesson, you should be able to:
@@ -343,6 +355,39 @@ str(mod)
 str(mod_summ)
 ```
 
+```{r}
+get_even_pos <- function(x) {
+    if (length(x) <= 1) {
+        print("No even positions")
+    } else {
+        idx <- seq(2, length(x), by = 2)
+        x[idx]
+    }
+}
+get_even_pos(1:10)
+get_even_pos(1:9)
+get_even_pos(1)
+```
+
+
+```{r}
+get_all_but_last <- function(x) {
+    head(x, -1)
+    # x[1:(length(x)-1)]
+}
+get_all_but_last(1:10)
+```
+
+```{r}
+get_evens <- function(x) {
+    x[x %% 2 == 0 & !is.na(x)]
+}
+
+get_evens(c(1, 2, 7, NA))
+get_evens(c(1, 2, 7, 8, NA))
+```
+
+
 ## Exercise 
 
 2. **CI Function** Write a function that fits a linear model on the dataset using the given outcome and predictor variables and return a data frame (`tibble`) with the coefficient estimate and CI for the predictor of interest. It should take the following inputs:
@@ -366,10 +411,10 @@ pred_of_interest <- "hp"
 When you're done developing your function, remove these objects to declutter your environment by entering `rm(data, yvar, preds, pred_of_interest)` in the Console.
 
 ```{r eval=FALSE}
-fit_mod_and_extract <- function(___) {
+fit_mod_and_extract <- function(data, yvar, preds, pred_of_interest) {
     # Use str_c to create a string (formula_str) that looks like "yvar ~ pred1 + pred2"
     # Look at the documentation for a helpful argument
-    mod_formula_str <- 
+    mod_formula_str <- str_c(yvar, "~", str_c(preds, collapse = "+"))
     mod_form <- as.formula(mod_formula_str)
     
     # Fit a linear model using the constructed formula and given data
@@ -381,19 +426,16 @@ fit_mod_and_extract <- function(___) {
     # Return the coefficient estimate and CI for the predictor of interest
     tibble(
         which_pred = pred_of_interest,
-        estimate = ___,
-        ci_lower = ___,
-        ci_upper = ___
+        estimate = mod$coefficients[pred_of_interest],
+        ci_lower = ci[pred_of_interest, "2.5 %"],
+        ci_upper = ci[pred_of_interest, "97.5 %"]
     )
 }
+
+
+fit_mod_and_extract(data = mtcars, yvar = "mpg", preds = c("hp", "wt"), pred_of_interest = "hp")
 ```
 
-```{r}
-
-
-
-
-```
 
 
 

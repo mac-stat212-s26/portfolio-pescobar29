@@ -1,0 +1,72 @@
+---
+title: "Homework 06"
+format: 
+  html: 
+    embed-resources: true
+---
+
+## TidyTuesday Section (optional)
+
+::: {.callout-important title="Instructions"}
+You can count work on this week's TidyTuesday toward the exceptional work required for an A in the Homework component.
+:::
+
+Explore the week's [TidyTuesday](https://github.com/rfordatascience/tidytuesday) challenge. Develop a research question, then answer it through a short data story with [effective visualization(s)]({{< var effective-viz-url >}}). Provide sufficient background for readers to grasp your narrative.
+
+------------------------------------------------------------------------
+
+\_\_\_\_
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+# Using R
+# Option 1: tidytuesdayR R package 
+## install.packages("tidytuesdayR")
+
+tuesdata <- tidytuesdayR::tt_load('2026-03-24')
+## OR
+tuesdata <- tidytuesdayR::tt_load(2026, week = 12)
+
+pi_digits <- tuesdata$pi_digits
+
+# Option 2: Read directly from GitHub
+
+pi_digits <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-03-24/pi_digits.csv')
+```
+
+```{r}
+pi_statistics <- pi_digits %>%
+  group_by(digit) %>%
+  summarise(count = n()) %>%
+  mutate(
+    proportion = (count / sum(count)) * 100,
+    deviation = count - 100000,
+    Maximun = count == max(count),
+    digit = as.factor(digit))
+```
+
+```{r}
+summary(pi_statistics)
+```
+
+```{r}
+pi_statistics |> 
+ggplot(aes(x = digit, y = proportion, fill = Maximun)) +
+  geom_col(color = "black") +
+  geom_hline(yintercept = 10, linetype = "dashed", color = "red", size = 1) +
+  coord_cartesian(ylim = c(10, 10)) + 
+  scale_fill_manual(values = c("pink", "skyblue")) +
+  labs(
+    title = "Which number appears more times in PI?",
+    subtitle = "Actual proportions of digits 0 to 9 in Pi relative to a uniform 10% distribution",
+    x = "Digits from 0 to 9",
+    y = "Proportion (%)",
+    caption = "Data: TidyTuesday 2026-03-24 | Author: Patricia Escobar") +
+  theme_minimal() +
+  geom_text(aes(label = sprintf("%.2f%%", proportion)), vjust = -0.5, size = 3.5)
+```
+
+I looked at which numbers appear more times in PI relative to an expected 10% uniform distribution. I discovered that the number that appears more times is 5, making up 10.04% of all the numbers, and the number that appears fewer times is 6, making up 9.95% of all the numbers in Pi.
