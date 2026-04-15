@@ -74,10 +74,9 @@ Compare the four ways to create a vector of integers from 1 to 100,000.
 
 ```{r}
 # Compile Results
-bind_rows(results1, results2, results3, results4) |>
-  mutate(type = c("for_loop_no_storage", "for_loop_with_storage", "purrr_map", "standard_func")) |>
-  select(type, mem_alloc, total_time)  |> print()
-
+#bind_rows(results1, results2, results3, results4) |>
+#  mutate(type = c("for_loop_no_storage", "for_loop_with_storage", "purrr_map", "standard_func")) |>
+#  select(type, mem_alloc, total_time)  |> print()
 ```
 
 ## Iteration with `map`
