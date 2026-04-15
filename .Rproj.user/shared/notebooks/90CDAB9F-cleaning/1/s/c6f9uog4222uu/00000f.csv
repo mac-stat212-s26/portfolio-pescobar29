@@ -1,2 +1,0 @@
-"0","weather_new <- weather |> "
-"0","    mutate(PrecipYr = na_if(PrecipYr, 99999))"

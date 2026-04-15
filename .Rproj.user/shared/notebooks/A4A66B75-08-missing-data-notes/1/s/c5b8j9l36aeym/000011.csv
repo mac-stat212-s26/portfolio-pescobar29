@@ -1,5 +1,0 @@
-"0","ggplot(airquality_mod, aes(x = Solar.R_mod1, y = Ozone)) +"
-"0","    geom_point() +"
-"0","    geom_smooth() +"
-"0","    geom_vline(data = airquality_mod |> filter(is.na(Ozone)), mapping = aes(xintercept = Solar.R_mod1)) +"
-"0","    labs(title = ""Alternate Situation 1"")"

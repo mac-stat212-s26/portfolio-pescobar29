@@ -1,2 +1,0 @@
-"0","weather_new <- weather_new |> "
-"0","    left_join(months)"

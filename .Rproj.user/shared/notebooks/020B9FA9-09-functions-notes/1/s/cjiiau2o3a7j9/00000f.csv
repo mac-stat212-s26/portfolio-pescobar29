@@ -1,8 +1,0 @@
-"0","scatter_with_smooths <- function(df, x, y) {"
-"0","    ggplot(df, aes(x = {{ x }}, y = {{ y }})) +"
-"0","        geom_point() +"
-"0","        geom_smooth(color = ""blue"") +"
-"0","        geom_smooth(method = ""lm"", color = ""red"")"
-"0","}"
-"0",""
-"0","scatter_with_smooths(diamonds, x = carat, y = price)"

@@ -1,4 +1,0 @@
-"0","#3"
-"0","diamonds |> "
-"0","    mutate(is_fpi = cut %in% c(""Fair"", ""Premium"", ""Ideal"")) |> "
-"0","    summarize(num_fpi = sum(is_fpi), frac_fpi = mean(is_fpi))"

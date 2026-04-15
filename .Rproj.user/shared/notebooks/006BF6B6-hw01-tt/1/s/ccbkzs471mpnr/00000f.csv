@@ -1,5 +1,0 @@
-"0","#Method extracted from the repository"
-"0","companies <- tuesdata$companies"
-"0","legal_nature <- tuesdata$legal_nature"
-"0","qualifications <- tuesdata$qualifications"
-"0","size <- tuesdata$size"

@@ -1,3 +1,0 @@
-"0","#Transforming the CRS the county data to the more local CRS of the cities"
-"0","mn_counties <- mn_counties |>"
-"0","    st_transform(crs = st_crs(mn_cities))"

@@ -1,3 +1,0 @@
-"0","data(diamonds)"
-"0","diamonds <- diamonds |> "
-"0","    slice_head(n = 1000)"

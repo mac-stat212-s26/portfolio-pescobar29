@@ -1,2 +1,0 @@
-"0","ggplot(airquality, aes(x = Solar.R, color = is.na(Ozone))) + "
-"0","    geom_density()"

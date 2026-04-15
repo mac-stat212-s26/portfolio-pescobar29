@@ -1,8 +1,0 @@
-"0",""
-"0","lakers_clean <- lakers_clean |>"
-"0","    group_by(date, opponent, period) |>"
-"0","    arrange(date, opponent, period, desc(time)) |>"
-"0","    mutate("
-"0","        diff_btw_plays_sec = as.numeric(time - lag(time, 1))"
-"0","    )"
-"0","lakers_clean |> select(date, opponent, time, period, diff_btw_plays_sec)"

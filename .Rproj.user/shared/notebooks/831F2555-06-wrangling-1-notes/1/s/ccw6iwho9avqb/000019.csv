@@ -1,3 +1,0 @@
-"0","diamonds |> "
-"0","    filter(cut == ""Ideal"") |> "
-"0","    summarize(high_all = all(price > 2000))"

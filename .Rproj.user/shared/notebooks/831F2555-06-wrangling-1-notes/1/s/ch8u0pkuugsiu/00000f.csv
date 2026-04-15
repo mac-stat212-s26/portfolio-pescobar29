@@ -1,3 +1,0 @@
-"0","#2"
-"0","diamonds |> "
-"0","    filter(price >= 500, price <= 600)"

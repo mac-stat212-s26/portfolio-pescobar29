@@ -1,6 +1,0 @@
-"0","elevation <- elevatr::get_elev_raster(mn_counties, z = 5, clip = ""bbox"")"
-"0","raster::crs(elevation) <- sf::st_crs(mn_counties)"
-"0",""
-"0","# Convert to data frame for plotting"
-"0","elev_df <- elevation |> terra::as.data.frame(xy = TRUE)"
-"0","colnames(elev_df) <- c(""x"", ""y"", ""elevation"")"

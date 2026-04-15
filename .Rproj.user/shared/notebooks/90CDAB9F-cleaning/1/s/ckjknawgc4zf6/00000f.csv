@@ -1,3 +1,0 @@
-"0","months <- tibble("
-"0","    Month = 1:12,"
-"0","    month_name = month.abb)"

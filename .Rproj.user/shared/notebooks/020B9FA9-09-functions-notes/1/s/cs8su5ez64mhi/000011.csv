@@ -1,5 +1,0 @@
-"0","# Does throw an error"
-"0","average(c(1, 2, 3, NA))"
-"2","Error in average(c(1, 2, 3, NA)) : 
-  argument ""remove_nas"" is missing, with no default
-"

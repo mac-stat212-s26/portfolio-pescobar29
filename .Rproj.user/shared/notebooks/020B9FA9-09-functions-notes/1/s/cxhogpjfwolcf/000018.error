@@ -1,1 +1,0 @@
-{"frames":[{"func":"function_name(input_name_1 = 2, input_name_2 = 4)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in function_name(input_name_1 = 2, input_name_2 = 4) : \n  object 'output' not found\n"}

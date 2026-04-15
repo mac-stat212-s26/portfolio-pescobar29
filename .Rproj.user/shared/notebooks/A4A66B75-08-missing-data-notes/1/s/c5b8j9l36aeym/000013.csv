@@ -1,4 +1,0 @@
-"0",""
-"0","ggplot(airquality_mod, aes(x = is.na(Ozone), y = Solar.R_mod2)) + "
-"0","    geom_boxplot() +"
-"0","    labs(title = ""Alternate Situation 2"")"

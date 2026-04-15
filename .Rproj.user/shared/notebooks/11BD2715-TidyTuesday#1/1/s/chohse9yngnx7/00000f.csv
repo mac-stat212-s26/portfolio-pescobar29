@@ -1,4 +1,0 @@
-"0","plot_data <- sfi_grants %>%"
-"0","  group_by(programme_name) %>%"
-"0","  summarise(total_commitment = sum(current_total_commitment, na.rm = TRUE)) %>%"
-"0","  slice_max(total_commitment, n = 20)"

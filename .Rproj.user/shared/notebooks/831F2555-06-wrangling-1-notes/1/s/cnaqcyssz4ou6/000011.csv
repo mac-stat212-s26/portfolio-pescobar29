@@ -1,8 +1,0 @@
-"0","#5"
-"0","diamonds |> "
-"0","    mutate("
-"0","        price_category_1 = if_else(price < 500, ""low"", ""high""),"
-"0","        price_category_2 = case_when("
-"0","            price < 500 ~ ""low"","
-"0","            price >= 500 & price <= 1000 ~ ""medium"","
-"0","            price > 1000 ~ ""high""))"

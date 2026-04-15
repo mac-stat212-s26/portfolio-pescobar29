@@ -1,5 +1,0 @@
-"0","df <- tibble("
-"0","    first_name = c(""Arya"", ""Olenna"", ""Tyrion"", ""Melisandre""),"
-"0","    last_name = c(""Stark"", ""Tyrell"", ""Lannister"", NA)"
-"0",")"
-"0","df"
