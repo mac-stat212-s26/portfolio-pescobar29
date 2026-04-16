@@ -1,5 +1,228 @@
 ---
-title: "Extra Sample 1"
+title: "Political Analysis"
+date: now
+date-format: "YYYY-MM-DDTHH:mm:ssZ"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+    code-tools: true
+editor: 
+  markdown: 
+    wrap: sentence
 ---
 
-Add content here
+```{r setup}
+#| include: false
+
+knitr::opts_chunk$set(
+  collapse = TRUE, 
+  warning = FALSE,
+  message = FALSE,
+  fig.height = 2.75, 
+  fig.width = 4.25,
+  fig.env = 'figure',
+  fig.pos = 'h',
+  fig.align = 'center')
+
+library(tidyverse)
+cb_palette <- c("black", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+scale_colour_discrete <- function(...) scale_colour_manual(values = cb_palette, ...)
+scale_fill_discrete   <- function(...) scale_fill_manual(values = cb_palette, ...)
+theme_set(theme_bw())
+```
+
+
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#Dataset
+library(tidyverse)
+pulse <- read.csv("https://mac-stat.github.io/data/pulse_of_the_nation_processed.csv")
+```
+
+
+```{r}
+head(pulse)
+```
+
+```{r}
+# Dataset for our model 
+pulse2 <- pulse %>%
+  mutate(
+    party_clean = str_trim(str_to_lower(as.character(party))),
+    party_binary = case_when(
+    party_clean == "democrat" ~ "Democrats",
+    party_clean %in% c("republican", "independent") ~ "Non-democrats", TRUE ~ "Non-democrats"),
+    party_binary = factor(party_binary, levels = c("Democrats", "Non-democrats"))) %>%
+    select(-party_clean)  
+```
+
+```{r}
+head(pulse2)
+```
+
+
+```{r}
+#Adding the "TRUE" and "FALSE" components 
+pulse_final_version <- pulse2 %>%
+  mutate(Democrats = (party == "Democrat"))
+```
+
+```{r}
+head(pulse_final_version)
+```
+
+
+```{r}
+# Used in our table 1 
+pulse_final_version %>% 
+  count(Democrats)
+```
+
+```{r}
+# Used in our table 1
+table_info <- pulse_final_version %>%
+  group_by(education) %>%
+  summarise(
+    n = n(),
+    percentage_dem = mean(party_binary == "Democrats") * 100,
+    percentage_non_dem = mean(party_binary == "Non-democrats") * 100)
+```
+
+```{r}
+table_info
+```
+```{r}
+pulse_final_version %>% 
+  count(education, party_binary)
+```
+
+
+```{r}
+# Used in our table 1 
+summary_income_by_party <- pulse_final_version %>%
+group_by(party_binary) %>%
+summarise(
+    mean_income = round(mean(income, na.rm = TRUE), 2),
+    sd_income = round(sd(income, na.rm = TRUE), 2),
+    total = n())
+```
+
+
+```{r}
+summary_income_by_party
+```
+
+
+```{r}
+# Results section 
+# Converting party to 0/1 numeric, supposing "Democrat" = 1 and "Not Democrat" = 0
+pulse_with_numbers <- pulse_final_version %>%
+mutate(party_num = if_else(party == "Democrat", 1, 0))
+
+#Used results 
+# Logistic regression
+partydata <- glm(party_num ~ education + income, data = pulse_with_numbers, family = binomial)
+summary(partydata)
+```
+
+```{r}
+exp(coef(partydata))
+```
+
+
+```{r}
+# Figure 1
+pulse_final_version %>% 
+  ggplot(aes(x = Democrats)) +
+  geom_bar()+
+  labs(title = "Number of Non-Democrats vs Democrats")
+```
+
+```{r}
+# Figure 2 
+pulse_final_version %>% 
+  mutate(education = factor(education,levels = c("High school", "Some college", "College degree", "Graduate degree", "Other"))) %>% 
+  ggplot(aes(x= education, fill = Democrats))+ 
+  geom_bar(position = "fill") + 
+  theme(axis.text.x = element_text(angle = 40, hjust = 1)) +
+  labs(title = "Education levels by party affiliation")
+```
+
+```{r}
+# Figure 3
+pulse_final_version %>%
+  ggplot(aes(y = as.numeric(Democrats), x = income)) +
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family = "binomial"),
+  fullrange = TRUE) +
+  labs(y = "Probability value") +
+  lims(x = c(1, 400))+
+  labs(title = "Probability of being a Democrat by Income per $100")
+```
+
+```{r}
+# Figure 4
+pulse_final_version %>% 
+  mutate(education = factor(education,levels = c("High school", "Some college", "College degree", "Graduate degree", "Other"))) %>% 
+  ggplot(aes(y = as.numeric(Democrats), x = income, color = education)) + 
+  geom_smooth(method = "glm", se = FALSE, method.args = list(family = "binomial"),
+  fullrange = TRUE) +
+  labs(y = "Probability value") + 
+  lims(x = c(0, 400))+
+  labs(title = "Probability of being a Democrat based on income and education level")
+```
+
+```{r}
+# Figure 5 
+pulse_final_version %>% 
+  mutate(education = factor(education,levels = c("High school", "Some college", "College degree", "Graduate degree", "Other"))) %>% 
+  filter(gender != "Other", age < 80) %>%
+  ggplot(aes(x = education, y = age, fill = gender)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1)) +
+  labs(title = "Education levels by gender and age")
+```
+
+```{r}
+#F Test (determining the impact of education on the overal model)  
+partymodel1<-glm(Democrats~education+income, data=pulse_final_version,family= "binomial")
+partymodel3<-glm(Democrats~education, data=pulse_final_version,family= "binomial")
+ls(pulse_final_version)
+summary(partymodel3)
+anova(partymodel3,partymodel1)
+```
+
+```{r}
+partymodel1<-glm(Democrats~education+income, data=pulse_final_version,family= "binomial")
+partymodel3<-glm(Democrats~income, data=pulse_final_version,family= "binomial")
+ls(pulse_final_version)
+summary(partymodel3)
+anova(partymodel3, partymodel1)
+```
+
+#Model evaluation 
+```{r}
+#Overall accuracy 
+(146+278)/1000 
+```
+
+
+```{r}
+#Sensitivity 
+278/329
+```
+
+
+```{r}
+#Specificity 
+146/671
+```
+
+
