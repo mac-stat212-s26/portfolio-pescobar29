@@ -365,7 +365,6 @@ The instructions are set out in more detail [here](https://shiny.rstudio.com/art
 
 ```{r}
 library(rsconnect)
-    rsconnect::deployApp('path/to/your/app')
 ```
 
 ```{r}
