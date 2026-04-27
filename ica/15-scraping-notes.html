@@ -291,7 +291,7 @@ cookieconsent.run({
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/15-scraping-notes.html"><span class="chapter-title">15 Web scraping</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/cleaning.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/15-scraping-notes.html"><span class="chapter-title">15 Web scraping</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -354,16 +354,6 @@ cookieconsent.run({
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tt/2025-07-08.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">TidyTuesday Sample 1</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tt/2025-07-15.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">TidyTuesday Sample 2</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../tt/hw01-tt.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Homework 01</span></a>
   </div>
 </li>
@@ -405,16 +395,6 @@ cookieconsent.run({
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ica/ica-sample1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ICA Sample 1</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../ica/ica-sample2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">ICA Sample 2</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../ica/cleaning.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Cleaning SFO Weather Data</span></a>
   </div>
@@ -521,7 +501,7 @@ cookieconsent.run({
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/ica-sample1.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/15-scraping-notes.html"><span class="chapter-title">15 Web scraping</span></a></li></ol></nav><div class="quarto-title">
+<main class="content column-body" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../ica/cleaning.html">In-Class Activities</a></li><li class="breadcrumb-item"><a href="../ica/15-scraping-notes.html"><span class="chapter-title">15 Web scraping</span></a></li></ol></nav><div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">15 Web scraping</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
@@ -645,12 +625,12 @@ cookieconsent.run({
 <span id="cb3-4"><a href="#cb3-4"></a>    <span class="fu">html_text</span>()</span>
 <span id="cb3-5"><a href="#cb3-5"></a><span class="fu">head</span>(article_titles)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details><div class="cell-output cell-output-stdout">
-<pre><code>[1] "NIH-funded breakthrough shrinks CRISPR for precision delivery in the body"                               
-[2] "Low-cost care model reduces blood pressure in high-risk populations "                                    
-[3] "NIH researchers&nbsp;discover&nbsp;pain-relieving&nbsp;drug&nbsp;with&nbsp;minimal addictive properties"                          
-[4] "NIH awards&nbsp;top&nbsp;scientific teams for innovations linking nutrition and autoimmune disease&nbsp;"               
-[5] "Dr. Elisabeth Armstrong&nbsp;named&nbsp;NIH Chief of Staff&nbsp;"                                                       
-[6] "Chronic inflammation leaves long-lasting impression on gut stem cells, increasing colorectal cancer risk"</code></pre>
+<pre><code>[1] "Symptom-based approach treats opioid withdrawal in newborns with minimal drug exposure "
+[2] "Clinical trial finds no difference in fluid treatment options for pediatric sepsis "    
+[3] "NIH-funded AI model predicts cancer survival from single-cell tumor data&nbsp;"              
+[4] "Dr. Jonathan M. Green selected as CEO of the NIH Clinical Center "                      
+[5] "NIH-funded breakthrough shrinks CRISPR for precision delivery in the body"              
+[6] "Low-cost care model reduces blood pressure in high-risk populations "                   </code></pre>
 </div>
 </div>
 <p><strong>Exercise:</strong> Our goal is to get article titles, publication dates, and abstract text for news releases across several pages of results.</p>
@@ -721,12 +701,12 @@ cookieconsent.run({
 <pre><code># A tibble: 6 × 3
   title                                                        pub_date abstract
   &lt;chr&gt;                                                        &lt;chr&gt;    &lt;chr&gt;   
-1 NIH-funded breakthrough shrinks CRISPR for precision delive… April 1… Smaller…
-2 Low-cost care model reduces blood pressure in high-risk pop… April 8… NIH-sup…
-3 NIH researchers discover pain-relieving drug with minimal a… April 1… Positiv…
-4 NIH awards top scientific teams for innovations linking nut… March 3… Competi…
-5 Dr. Elisabeth Armstrong named NIH Chief of Staff             March 3… She wil…
-6 Chronic inflammation leaves long-lasting impression on gut … March 2… NIH-fun…</code></pre>
+1 Symptom-based approach treats opioid withdrawal in newborns… April 2… NIH-fun…
+2 Clinical trial finds no difference in fluid treatment optio… April 2… NIH-sup…
+3 NIH-funded AI model predicts cancer survival from single-ce… April 2… Study l…
+4 Dr. Jonathan M. Green selected as CEO of the NIH Clinical C… April 2… The NIH…
+5 NIH-funded breakthrough shrinks CRISPR for precision delive… April 1… Smaller…
+6 Low-cost care model reduces blood pressure in high-risk pop… April 8… NIH-sup…</code></pre>
 </div>
 </div>
 </section><section id="example-2-nih-stem-teaching-resources" class="level2"><h2 class="anchored" data-anchor-id="example-2-nih-stem-teaching-resources">Example 2: NIH STEM Teaching Resources</h2>
