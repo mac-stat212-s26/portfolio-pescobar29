@@ -54,19 +54,19 @@ summary(pi_statistics)
 
 ```{r}
 pi_statistics |> 
-ggplot(aes(x = digit, y = proportion, fill = Maximun)) +
-  geom_col(color = "black") +
-  geom_hline(yintercept = 10, linetype = "dashed", color = "red", size = 1) +
-  coord_cartesian(ylim = c(10, 10)) + 
-  scale_fill_manual(values = c("pink", "skyblue")) +
+  mutate(diff = proportion - 10) |> 
+  ggplot(aes(x = factor(digit), y = diff)) +
+  geom_col(fill = "skyblue", color = "black") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", size = 1) +
+  scale_y_continuous(labels = function(x) paste0(x + 10, "%")) +
   labs(
     title = "Which number appears more times in PI?",
-    subtitle = "Actual proportions of digits 0 to 9 in Pi relative to a uniform 10% distribution",
+    subtitle = "Deviation from the uniform 10% distribution",
     x = "Digits from 0 to 9",
     y = "Proportion (%)",
     caption = "Data: TidyTuesday 2026-03-24 | Author: Patricia Escobar") +
   theme_minimal() +
-  geom_text(aes(label = sprintf("%.2f%%", proportion)), vjust = -0.5, size = 3.5)
+  geom_text(aes(label = sprintf("%.2f%%", proportion), vjust = ifelse(diff >= 0, -0.5, 1.5)), size = 3.5)
 ```
 
 I looked at which numbers appear more times in PI relative to an expected 10% uniform distribution. I discovered that the number that appears more times is 5, making up 10.04% of all the numbers, and the number that appears fewer times is 6, making up 9.95% of all the numbers in Pi.
