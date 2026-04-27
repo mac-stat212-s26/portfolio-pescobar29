@@ -1,5 +1,55 @@
 ---
-title: "TidyTuesday Sample 1"
+title: "TidyTuesday Challenge"
 ---
 
-Add content here
+```{r}
+# Using R
+# Option 1: tidytuesdayR R package 
+## install.packages("tidytuesdayR")
+
+tuesdata <- tidytuesdayR::tt_load('2026-04-21')
+## OR
+tuesdata <- tidytuesdayR::tt_load(2026, week = 16)
+
+financing_schemes <- tuesdata$financing_schemes
+health_spending <- tuesdata$health_spending
+spending_purpose <- tuesdata$spending_purpose
+
+# Option 2: Read directly from GitHub
+
+financing_schemes <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/financing_schemes.csv')
+health_spending <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/health_spending.csv')
+spending_purpose <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-04-21/spending_purpose.csv')
+```
+
+```{r}
+library(tidyverse)
+library(scales)
+```
+
+```{r}
+afg_purpose_data <- spending_purpose %>%
+  filter(country_name == "Afghanistan", year == 2021, unit == "constant 2023 US$") %>%
+  mutate(purpose_clean = str_remove(spending_purpose, " \\(non-specified.*\\)"))
+```
+
+
+```{r}
+afg_purpose_data |> 
+ggplot(aes(x = reorder(purpose_clean, value), y = value)) +
+  geom_col(fill = "darkblue", width = 0.7) +
+  coord_flip() +
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) +
+  labs(
+    title = "How is Afghanistan Spending?",
+    subtitle = "A look to their 2021 data in US$",
+    caption = "Source: Global Health Spending, 2026. Author: Patricia Escobar",
+    x = NULL,
+    y = "Spending (USD)" )+
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.major.y = element_blank(), plot.title = element_text(face = "bold"))
+```
+
+As you can see in the visualization, in 2021, most of Afghanistan’s health money went toward buying medicine and medical supplies, which are often expensive for everyday people. While there was some money for curative and preventive care, there was very little spent on running the health system or long-term recovery (rehabilitation). Because of this, it could be said that essentially the data shows a system focused on the immediate "emergency" of buying supplies rather than building a strong foundation for the future, possibly due to factors such as the prevalence of emergencies in a country that is facing severe political inestability
+
+

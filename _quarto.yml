@@ -69,6 +69,7 @@ book:
       - tt/hw01-tt.qmd
       - tt/TidyTuesday_1.qmd
       - tt/hw06-tt.qmd
+      - tt/2025-07-08.qmd
 
     - part: "Pre-Class Learnings"
       chapters:
