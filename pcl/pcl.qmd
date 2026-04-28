@@ -9,3 +9,9 @@ title: "Pre-Class Learning Summaries"
 ## Quarto
 
 ![from qmd4sci.njtierney.com](0810-quarto.jpeg)
+
+```{r}
+knitr::include_graphics("images/pcl_02.jpg")
+```
+
+

@@ -1,5 +1,281 @@
 ---
-title: "Professional Viz"
+title: "Human Development Index Analysis"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    embed-resources: true
+editor:  
+  markdown: 
+    wrap: sentence
 ---
 
-Add content here
+## Introduction 
+
+Social and economic development impacts the lives of many around the world. Despite globalization, regional and international disparities in various aspects of development remain relevant. As three international students, we wanted to realize a project with global relevance without necessarily focusing on our own countries. Thus, we managed to use the skills we gained in and outside the classroom to make a project that we are proud of. 
+Throughout this research, we will dive deeper into one of the most internationally-accredited measures of development, the Human Development Index (HDI), and see how its indicators interact with one another. The research question that guides this exploration is as follows:
+How do different components of the Human Development Index (HDI)
+interact with each other?
+
+The Human Development Index is a statistical measure used by the United nations Development Program (UNDP) to examine the development of countries. It focuses on 4 different components to measure a country’s development: a healthy life, measured by life expectancy at birth; education, measured by the mean years of schooling and the expected years of schooling, and finally, the economic prospects, measure by GNI per capita (Gross National Income per individual, meaning the average income per citizen of the country). 
+
+
+Our data was collected from the United Nations' official website. The HDI value is calculated annually and is mainly used to examine a country’s achievements in development and to make national, regional, and international comparisons . The United Nations uses various resources such as the World Bank, Eurostat, national bureaus of statistics, and various divisions within the UN to collect the data for HDI. 
+
+Our original dataset contained information regarding HDI and its indices from 1990 up until 2022. However, for the limited scope of this research, we only kept the data for 2022. The unit of observation is one country. 
+
+
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(ggthemes)
+library(rnaturalearth)
+library(sf)
+library(ggthemes)
+library(plotly)
+library(viridis)
+```
+
+```{r}
+hdi_original <- read_csv("HDR23-24_Composite_indices_complete_time_series (1) (1).csv")
+```
+
+```{r}
+lon_and_lat <- read_csv("world_country_and_usa_states_latitude_and_longitude_values.csv")
+```
+
+```{r}
+hdi_clean_1 <- hdi_original %>% 
+  select(iso3, country, hdicode, region, hdi_rank_2022, hdi_2022, le_2022, eys_2022, mys_2022, gnipc_2022) %>% 
+  filter(!is.na(hdi_rank_2022)) 
+```
+
+```{r}
+result_final <- full_join(lon_and_lat, hdi_clean_1, by = c("country"))
+```
+
+## Human Development on a global and regional level
+
+```{r}
+world_boundaries <- ne_countries(returnclass = "sf")
+world_data <- merge(world_boundaries, result_final, by.x = "iso_a3", by.y = "iso3", all.x = TRUE)
+
+ggplotly(
+ggplot(data = world_data) +
+geom_sf(aes(fill = hdi_2022)) +
+scale_fill_viridis_c(
+option = "viridis",  
+name = "HDI 2022"
+    ) +
+theme_minimal() +
+theme(legend.position = "right") +
+labs(title = "Human Development Index (HDI) by Country")
+)
+
+```
+
+This map displays the Human Development Index (HDI) of countries worldwide, with yellow and green colors representing higher HDI values and blue and purple indicating lower values. Countries with no data or very low HDI are shown in gray. The HDI values range from approximately 0.4 to 0.9+, signifying disparities in development levels. Highly developed countries are concentrated in North America, Europe, and Oceania, while underdeveloped countries are predominantly in Africa and parts of Asia.
+
+
+### Regional Development
+
+The visualization below gives us insight into development disparities among various regions of the world. This heat map is based upon a scaling color legend : lighter colors mean a higher value, while darker colors represent lower values. Additionally, having the World data represented allows us to make deeper comparisons not only between regions but also in a wider global context.
+```{r}
+mydata <- data.frame(
+  country = c("Arab States", "East Asia and the Pacific", "Europe and Central Asia", "Latin America and the Caribbean", "South Asia", "Sub-Saharan Africa", "World"),
+  hdi_2022 = c(0.704, 0.766, 0.802, 0.763, 0.641, 0.549, 0.739),
+   mys_2022 = c(7.76, 8.21, 10.6, 8.96, 6.63, 5.98, 8.66),
+  eys_2022 = c(11.90, 14.48, 15.51, 14.78, 11.87, 10.32, 12.99),
+  gnipc_2022 = c(14390.85, 16137.70, 19762.98, 15109.41, 6971.63, 3666.20, 17254.43),
+  le_2022 = c(71.31, 76.22, 73.56, 73.72, 68.44, 60.64, 72.00)
+)
+```
+
+```{r}
+row.names(mydata) <- mydata$country
+mydata$country <- NULL
+
+data_matrix <- as.matrix(mydata)
+
+heatmap(data_matrix,
+        Rowv = NA,
+        Colv = NA,
+        col=viridis(250),
+        scale = "column",
+        margins = c(10,10),
+        main = "HDI Analysis per Region")
+```
+
+
+We can identify that Europe has an overall better HDI compared to regions such as Sub-Saharan Africa which are represented by darker colors. The heat map illuminates the development disparities between regions and the socio-economic factors that have shaped them.This visual is particularly helpful to our research as it also gives insight into the different components of the HDI index individually. For the remainder of this research, we will dive into each of these components and examine how they interact with each other. 
+
+## Education  
+
+```{r}
+ggplotly(
+hdi_clean_1 %>% 
+ggplot(aes(x = mys_2022, y = eys_2022)) +
+geom_point(aes(color = hdicode, text = iso3)) +
+geom_smooth(method = "lm", se = FALSE, color = "black") +
+    labs(
+x = "Mean Years of Schooling", 
+y = "Expected Years of Schooling", 
+color = "HDI Code"
+    ) +
+scale_color_viridis_d(option = "viridis") +  
+theme_minimal() +
+theme(
+panel.background = element_rect(fill = "lightgray", color = "black"),
+axis.title = element_text(size = 12, face = "bold"),
+axis.text = element_text(size = 10),
+plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic")
+    )
+)
+
+```
+
+Diving deeper into the educational indicators of HDI, we plotted the expected years of schooling against the mean years of schooling. Expectedly, countries with a higher mean and expected years of schooling tend to be among the top tiers of the HDI Code. Although there is a positive correlation between the two indicators, the data points are quite dispersed around the trend line; suggesting a high degree of variability among countries. Additionally, we noticed some intriguing data points that prompted us to further zoom into a specific country: South Sudan. This country is represented by a green point and has the lowest expected years of schooling among all countries. 
+
+
+```{r}
+hdi_original %>% 
+  filter(country %in% c("South Sudan", "World", "Sub-Saharan Africa")) %>% 
+  select(country,eys_2022, mys_2022) %>%
+  ggplot(aes(x = mys_2022, y = eys_2022, label = country)) +
+  geom_text() +
+  xlim(4, 10) +
+  ylim(4, 13) +
+  labs(x = "Average Years of Schooling", y = "Expected Years of Schooling") +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightgray", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic")
+  )
+
+
+```
+
+In this visualization, we compared the education-related indicators of HDI in South Sudan with their averages on a regional (Sub-Saharan Africa) and international (World) level. While the mean years of schooling in South Sudan is fairly similar to that of the rest of the region, the expected years of schooling tells a different story. While the rest of the region has high hopes for their education, South Sudan is in a stagnant position. This shows that the ongoing civil war has impacted every aspect of development in South Sudan; including education. Comparing Sub-Saharan Africa and South Sudan with the world average provides another layer of insight into the educational disparities around the globe. 
+
+
+
+## Health and Economic Factors
+The two visualizations below are representations of the GNI per Capita and the Life expectancy of all countries.
+Both visualizations follow the color-coding scheme of the previous visualization, which allows us to effectively understand the position of all countries concerning the different components. 
+
+
+The visualization regarding Life expectancy and HDI reveals an interesting pattern : an overlapping of similar life expectancy values between countries that do not have similar HDI values.This suggests that there is not a clear correlation between the HDI ranking of a country and its life expectancy.Therefore, it can be understood that a high life expectancy doesn't necessarily translate into a high HDI.
+
+```{r}
+hdi_gni_code <- hdi_clean_1 %>%
+  select(hdicode, gnipc_2022, iso3, mys_2022, le_2022, eys_2022, hdi_2022)
+
+ggplotly(
+  ggplot(hdi_gni_code, aes(x = le_2022, y = hdi_2022, col = hdicode))+
+  geom_point()+
+  geom_line()+
+  scale_color_viridis_d()+
+  labs(title = "Correlation between Life expectancy and HDI in 2022", x = "Life expectancy", y = "HDI ")+
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightgray", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 10, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic"))
+)
+```
+
+
+On the other side the second visualization, shows a more organised trend, a strong correlation between the HDI rank and the GNI per capita. Countries with higher GNI per capita tend to have a higher HDI value and vice versa.
+
+
+```{r}
+
+ggplotly(
+  ggplot(hdi_gni_code, aes(x = gnipc_2022, y = hdi_2022, col = hdicode))+
+  geom_point()+
+  geom_line()+
+  scale_color_viridis_d()+
+  labs(title = "Correlation between GNI per Capita and HDI in the World in 2022", x = "GNI per Capita", y = "HDI ")
+)
+
+```
+
+By comparing these two graphs, we can observe that GNI per capita seems to have a more significant impact on the HDI of a country than life expectancy.In other words, coutnries with a lower life expectancy may still be high in the HDI ranking simply because their GNI per capita is higher. We were intrigued by this observation so we decided to explore this further by zooming into specific examples.
+
+### Cuba, Russia and Morocco 
+
+In the following graph, we compare the relationship between the GNI per capita and the life expectancy of 3 countries with different HDI categories; 
+Very high; Russia
+High; Cuba
+Medium; Morocco
+
+```{r}
+hdi_original %>% 
+  filter(country %in% c("Cuba", "Russian Federation", "Morocco")) %>% 
+  select(country, gnipc_2022) %>% 
+  pivot_longer(cols = c(gnipc_2022), names_to = "variable", values_to = "value") %>%
+  mutate(variable = str_replace(variable, "gnipc_2022", "GNI per capita"))  %>% 
+  ggplot(aes(x = variable, y = value, label = country, color = country)) +
+  geom_bar(stat = "identity", aes(x = variable, y = value, fill = country), position = "dodge") +
+  labs(
+    x = "",
+    y = "GNI per capita ($)",
+    title = "GNI per capita",
+    subtitle = "GNI per capita between the Russian Federation, Cuba and Morocco"
+  ) +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightgray", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic")
+  )
+```
+While looking at the GNI per capita, these rankings seem to be accurate since Russia has the highest GNI per capita, then comes Cuba, and lastly Morocco. However when we look at the life expectancy, we can see something different.
+
+```{r}
+hdi_original %>% 
+  filter(country %in% c("Cuba", "Russian Federation", "Morocco")) %>%
+  select(country, le_2022) %>% 
+  pivot_longer(cols = c(le_2022), names_to = "variable", values_to = "value") %>%
+  mutate(variable = str_replace(variable, "le_2022", "Life expectancy"))  %>% 
+  ggplot(aes(x = variable, y = value, label = country, color = country)) +
+  geom_bar(stat = "identity", aes(x = variable, y = value, fill = country), position = "dodge") +
+  labs(
+    x = "",
+    y = "Life Expectancy (Years)",
+    title = "Life Expectancy",
+    subtitle = "Life expectancy between the Russian Federation, Cuba and Morocco"
+  ) +
+  scale_fill_viridis_d() +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "lightgray", color = "black"),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    plot.subtitle = element_text(hjust = 0.5, size = 12, face = "italic")
+  )
+
+```
+In this case, the places are switched and Cuba has the highest life expectancy value, then Morocco, and lastly Russia. Nevertheless, the HDI rankings are still as follows: Russia (43), Cuba (85), Morocco (120). 
+
+Our specific example also demonstrates that the GNI per capita, representing the economy, weights more at building the HDI ranking than the overall health of the population. Although Cuba has a higher life expectancy, it is still 42 positions lower in the ranking than Russia.
+
+## Conclusion 
+This project deepened our knowledge and understanding of the Human Development Index, especially, the way the different components of the HDI interact with each other.
+The visualizations we created showed us a clearer and practical comprehension of the index and its components. 
+
+From the education component, we learnt that mean and expected years of schooling are positively correlated, but variability highlights how factors like instability can disrupt future educational prospects. Looking at the other 2 components, it is visible how the GNI per capita heavily influences HDI rankings, as seen with Cuba's higher life expectancy but lower HDI rank compared to Russia.
+
+In further projects, we would like to explore the correlation between the HDI and other relevant factors, such as climate change, inequality and governance. Additionally, examining the correlation between the HDI components themselves, such as GNI and Education, Life expectancy and Education, could reveal a profound analysis.
